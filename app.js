@@ -4,7 +4,6 @@ let playbooksData = [];
 let currentFilter = 'Tous';
 let currentSearch = '';
 let favorites = JSON.parse(localStorage.getItem('hackingToolkitFavs')) || [];
-let currentToolId = null;
 
 // --- DOM ELEMENTS ---
 const container = document.getElementById('toolsContainer');
@@ -22,73 +21,103 @@ const playbooksSection = document.getElementById('playbooksSection');
 
 // Modal
 const modal = document.getElementById('toolModal');
-// ... (Les éléments internes de la modale sont récupérés dynamiquement ou via IDs existants)
 
 // --- INITIALIZATION ---
 async function init() {
-    console.log("V5 Mastermind Loading...");
+    console.log("🚀 Démarrage V5...");
     
-    // Charger le thème sauvegardé
+    // 1. ACTIVER LES BOUTONS IMMÉDIATEMENT (Correction du bug)
+    setupEventListeners();
+    
+    // 2. Charger le thème
     const savedTheme = localStorage.getItem('hackingToolkitTheme') || 'default';
     setTheme(savedTheme);
 
+    // 3. Charger les données
     try {
-        // Chargement PARALLÈLE des outils et des playbooks
-        const [resTools, resPlaybooks] = await Promise.all([
-            fetch('tools.json'),
-            fetch('playbooks.json')
-        ]);
-
-        if (!resTools.ok || !resPlaybooks.ok) throw new Error("Erreur HTTP sur les fichiers JSON");
-
+        console.log("⏳ Chargement des fichiers JSON...");
+        
+        // On essaie de charger tools.json
+        const resTools = await fetch('tools.json');
+        if (!resTools.ok) throw new Error(`Erreur tools.json: ${resTools.status}`);
         toolsData = await resTools.json();
+        console.log(`✅ ${toolsData.length} outils chargés.`);
+
+        // On essaie de charger playbooks.json
+        const resPlaybooks = await fetch('playbooks.json');
+        if (!resPlaybooks.ok) throw new Error(`Erreur playbooks.json: ${resPlaybooks.status}`);
         playbooksData = await resPlaybooks.json();
+        console.log(`✅ ${playbooksData.length} playbooks chargés.`);
         
-        console.log(`Chargé: ${toolsData.length} outils, ${playbooksData.length} playbooks.`);
-        
+        // 4. Affichage
         renderCategories();
         renderTools();
         renderPlaybooks();
         updateCount();
-        setupEventListeners();
 
     } catch (error) {
-        console.error("Critical Error:", error);
-        container.innerHTML = `<div class="text-red-500 text-center py-10">Erreur chargement données (JSON manquants ?).<br>${error.message}</div>`;
+        console.error("❌ ERREUR CRITIQUE:", error);
+        container.innerHTML = `
+            <div class="col-span-full text-center text-red-500 py-10 border border-red-900 bg-red-900 bg-opacity-20 rounded p-4">
+                <i class="fas fa-bug text-4xl mb-4"></i>
+                <h2 class="text-xl font-bold">Erreur de chargement</h2>
+                <p class="text-sm mt-2">${error.message}</p>
+                <p class="text-xs text-gray-400 mt-4">Vérifiez la console (F12) et assurez-vous que 'tools.json' et 'playbooks.json' sont dans le même dossier.</p>
+            </div>`;
     }
 }
 
-// --- EVENT LISTENERS ---
+// --- EVENT LISTENERS (Délégués et Robustes) ---
 function setupEventListeners() {
-    // Recherche
-    searchInput.addEventListener('input', (e) => {
-        currentSearch = e.target.value.toLowerCase();
-        renderTools();
-        renderPlaybooks(); // Filtrer aussi les playbooks
-    });
+    console.log("🔌 Activation des boutons...");
 
-    // Clics globaux (Délégation)
+    // 1. Navigation Tabs (Correction directe)
+    if(tabTools && tabPlaybooks) {
+        tabTools.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            switchTab('tools'); 
+        });
+        tabPlaybooks.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            switchTab('playbooks'); 
+        });
+    } else {
+        console.error("⚠️ Impossible de trouver les boutons des onglets dans le HTML.");
+    }
+
+    // 2. Recherche
+    if(searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value.toLowerCase();
+            renderTools();
+            renderPlaybooks();
+        });
+    }
+
+    // 3. Clics globaux (Délégation pour les cartes et favoris)
     document.addEventListener('click', (e) => {
-        // Ouvrir Modal Outil
+        // Ouvrir Modal Outil (sur la carte ou le badge dans playbook)
         const toolCard = e.target.closest('.js-open-modal');
-        if (toolCard) openModal(parseInt(toolCard.dataset.id));
+        if (toolCard) {
+            const id = parseInt(toolCard.dataset.id);
+            if(!isNaN(id)) openModal(id);
+        }
 
         // Favoris
         const favBtn = e.target.closest('.js-fav-btn');
         if (favBtn) {
             e.stopPropagation();
-            toggleFavorite(parseInt(favBtn.dataset.id), favBtn);
+            const id = parseInt(favBtn.dataset.id);
+            toggleFavorite(id, favBtn);
         }
 
         // Fermer Modal
-        if (e.target === modal || e.target.closest('.js-close-modal')) closeModal();
+        if (e.target === modal || e.target.closest('.js-close-modal')) {
+            closeModal();
+        }
     });
 
-    // Navigation Tabs
-    tabTools.addEventListener('click', () => switchTab('tools'));
-    tabPlaybooks.addEventListener('click', () => switchTab('playbooks'));
-
-    // Clavier
+    // 4. Clavier
     document.addEventListener('keydown', (e) => {
         if(e.key === "Escape" && !modal.classList.contains('hidden')) closeModal();
     });
@@ -99,43 +128,38 @@ window.toggleTheme = function() {
     const themes = ['default', 'red-team', 'corporate', 'synthwave'];
     const current = localStorage.getItem('hackingToolkitTheme') || 'default';
     const nextIndex = (themes.indexOf(current) + 1) % themes.length;
-    const nextTheme = themes[nextIndex];
-    setTheme(nextTheme);
+    setTheme(themes[nextIndex]);
 }
 
 function setTheme(themeName) {
-    if (themeName === 'default') {
-        body.removeAttribute('data-theme');
-    } else {
-        body.setAttribute('data-theme', themeName);
-    }
+    if (themeName === 'default') body.removeAttribute('data-theme');
+    else body.setAttribute('data-theme', themeName);
     localStorage.setItem('hackingToolkitTheme', themeName);
-    
-    // Mettre à jour le texte du bouton (optionnel)
-    const btn = document.getElementById('themeBtnIcon');
-    if(btn) btn.className = themeName === 'corporate' ? 'fas fa-sun' : 'fas fa-moon';
 }
 
 // --- TABS LOGIC ---
 function switchTab(tab) {
+    console.log("Switching to tab:", tab);
     if (tab === 'tools') {
         toolsSection.classList.remove('hidden');
         playbooksSection.classList.add('hidden');
         tabTools.classList.add('active');
         tabPlaybooks.classList.remove('active');
-        categoryContainer.classList.remove('hidden'); // Afficher filtres catégories
+        categoryContainer.classList.remove('hidden');
     } else {
         toolsSection.classList.add('hidden');
         playbooksSection.classList.remove('hidden');
         tabTools.classList.remove('active');
         tabPlaybooks.classList.add('active');
-        categoryContainer.classList.add('hidden'); // Cacher filtres catégories
+        categoryContainer.classList.add('hidden');
     }
 }
 
 // --- RENDER FUNCTIONS ---
 function renderTools() {
+    if(!container) return;
     container.innerHTML = '';
+    
     const filtered = toolsData.filter(tool => {
         const matchesSearch = tool.name.toLowerCase().includes(currentSearch) || 
                               tool.shortDesc.toLowerCase().includes(currentSearch) ||
@@ -149,7 +173,7 @@ function renderTools() {
     });
 
     if (filtered.length === 0) {
-        container.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10">Aucun outil trouvé.</div>`;
+        container.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10">Aucun outil trouvé pour cette recherche.</div>`;
     } else {
         filtered.forEach(tool => {
             const isFav = favorites.includes(tool.id);
@@ -174,11 +198,15 @@ function renderTools() {
                 </div>`;
         });
     }
-    toolCount.textContent = filtered.length;
+    if(toolCount) toolCount.textContent = filtered.length;
 }
 
 function renderPlaybooks() {
+    if(!playbooksContainer) return;
     playbooksContainer.innerHTML = '';
+    
+    if(playbooksData.length === 0) return;
+
     const filtered = playbooksData.filter(pb => 
         pb.title.toLowerCase().includes(currentSearch) || 
         pb.description.toLowerCase().includes(currentSearch)
@@ -192,10 +220,10 @@ function renderPlaybooks() {
     filtered.forEach(pb => {
         let stepsHtml = '';
         pb.steps.forEach(s => {
-            // Trouver le nom de l'outil lié
+            // Lien avec les outils
             const linkedTool = toolsData.find(t => t.id === s.toolId);
             const toolBadge = linkedTool 
-                ? `<span class="ml-2 text-xs border border-cyber-green text-cyber-green px-1 rounded cursor-pointer hover:bg-cyber-green hover:text-black js-open-modal" data-id="${linkedTool.id}"><i class="fas fa-link mr-1"></i>${linkedTool.name}</span>` 
+                ? `<span class="ml-2 text-xs border border-cyber-green text-cyber-green px-1 rounded cursor-pointer hover:bg-cyber-green hover:text-black js-open-modal transition-colors" data-id="${linkedTool.id}"><i class="fas fa-link mr-1"></i>${linkedTool.name}</span>` 
                 : '';
 
             stepsHtml += `
@@ -204,21 +232,21 @@ function renderPlaybooks() {
                         ${s.step}
                     </div>
                     <div>
-                        <p class="text-gray-300 text-sm mt-1">${s.desc} ${toolBadge}</p>
+                        <p class="text-gray-300 text-sm mt-1 leading-relaxed">${s.desc} ${toolBadge}</p>
                     </div>
                 </div>
             `;
         });
 
         playbooksContainer.innerHTML += `
-            <div class="bg-cyber-dark border border-cyber-greenDim p-6 rounded-sm mb-6 animate-fade-in relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-cyber-green"><i class="fas fa-chess-knight"></i></div>
+            <div class="bg-cyber-dark border border-cyber-greenDim p-6 rounded-sm mb-6 animate-fade-in relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity text-6xl text-cyber-green"><i class="fas fa-chess-knight"></i></div>
                 <div class="flex justify-between items-center mb-4 relative z-10">
                     <h3 class="text-2xl font-bold text-cyber-purple neon-text">${pb.title}</h3>
                     <span class="px-2 py-1 bg-cyber-black border border-gray-600 text-xs text-gray-400 rounded">${pb.level}</span>
                 </div>
                 <p class="text-gray-400 mb-6 italic border-b border-gray-800 pb-4">${pb.description}</p>
-                <div class="space-y-4">
+                <div class="space-y-4 relative z-10">
                     ${stepsHtml}
                 </div>
             </div>
@@ -227,6 +255,7 @@ function renderPlaybooks() {
 }
 
 function renderCategories() {
+    if(!categoryContainer) return;
     const categories = ['Tous', 'Favoris', ...new Set(toolsData.map(tool => tool.category))];
     categoryContainer.innerHTML = categories.map(cat => `
         <button onclick="setCategory('${cat}')"
@@ -237,7 +266,7 @@ function renderCategories() {
     `).join('');
 }
 
-// --- HELPERS ---
+// --- GLOBAL HELPERS (Window scope pour onclick HTML) ---
 window.setCategory = function(cat) { currentFilter = cat; renderTools(); }
 window.toggleFavorite = function(id, btn) {
     if(favorites.includes(id)) favorites = favorites.filter(fav => fav !== id);
@@ -246,39 +275,50 @@ window.toggleFavorite = function(id, btn) {
     renderTools();
 }
 
-// Reuse logic from V4 for Modals
+// --- MODAL LOGIC ---
 window.openModal = function(id) {
     const tool = toolsData.find(t => t.id === id);
     if(!tool) return;
     
-    // Remplissage basique
     document.getElementById('modalTitle').textContent = tool.name;
-    document.getElementById('modalCategory').textContent = tool.category;
-    document.getElementById('modalDesc').textContent = tool.fullDesc;
-    document.getElementById('modalEthical').textContent = tool.ethicalUse;
+    // Remplissage des champs de base
+    const catElem = document.getElementById('modalCategory');
+    if(catElem) catElem.textContent = tool.category;
     
-    // Tags & Links
-    document.getElementById('modalTags').innerHTML = tool.tags ? tool.tags.map(t => `<span class="px-2 py-1 bg-cyber-black text-cyber-green text-xs rounded border border-gray-700">${t}</span>`).join('') : '';
-    document.getElementById('modalLink').innerHTML = tool.link ? `<a href="${tool.link}" target="_blank" class="text-cyber-purple hover:text-white underline text-xs"><i class="fas fa-external-link-alt mr-1"></i>Site Officiel</a>` : '';
+    const descElem = document.getElementById('modalDesc');
+    if(descElem) descElem.textContent = tool.fullDesc;
 
-    // Inputs Builder Logic (Same as V4)
+    const ethicalElem = document.getElementById('modalEthical');
+    if(ethicalElem) ethicalElem.textContent = tool.ethicalUse;
+    
+    // Tags
+    const tagsElem = document.getElementById('modalTags');
+    if(tagsElem) tagsElem.innerHTML = tool.tags ? tool.tags.map(t => `<span class="px-2 py-1 bg-cyber-black text-cyber-green text-xs rounded border border-gray-700">${t}</span>`).join('') : '';
+    
+    // Link
+    const linkElem = document.getElementById('modalLink');
+    if(linkElem) linkElem.innerHTML = tool.link ? `<a href="${tool.link}" target="_blank" class="text-cyber-purple hover:text-white underline text-xs"><i class="fas fa-external-link-alt mr-1"></i>Site Officiel</a>` : '';
+
+    // Command Builder
     const area = document.getElementById('modalInputsArea');
     const code = document.getElementById('modalCommandCode');
-    area.innerHTML = '';
     
-    if (tool.inputs && tool.inputs.length > 0) {
-        tool.inputs.forEach(input => {
-            const div = document.createElement('div');
-            div.innerHTML = `<label class="block text-xs text-gray-500 mb-1 font-mono">${input.label}</label>
-                <input type="text" data-key="${input.id}" value="${input.default}" class="builder-input w-full p-2 rounded text-sm transition-colors">`;
-            area.appendChild(div);
-        });
-        const inputs = area.querySelectorAll('input');
-        inputs.forEach(i => i.addEventListener('input', () => updateCmd(tool, code, inputs)));
-        updateCmd(tool, code, inputs);
-    } else {
-        area.innerHTML = '<p class="text-xs text-gray-500 italic col-span-full">Aucun paramètre.</p>';
-        code.textContent = tool.command;
+    if(area && code) {
+        area.innerHTML = '';
+        if (tool.inputs && tool.inputs.length > 0) {
+            tool.inputs.forEach(input => {
+                const div = document.createElement('div');
+                div.innerHTML = `<label class="block text-xs text-gray-500 mb-1 font-mono">${input.label}</label>
+                    <input type="text" data-key="${input.id}" value="${input.default}" class="builder-input w-full p-2 rounded text-sm transition-colors border border-gray-700 bg-cyber-black text-cyber-green focus:border-cyber-green outline-none">`;
+                area.appendChild(div);
+            });
+            const inputs = area.querySelectorAll('input');
+            inputs.forEach(i => i.addEventListener('input', () => updateCmd(tool, code, inputs)));
+            updateCmd(tool, code, inputs);
+        } else {
+            area.innerHTML = '<p class="text-xs text-gray-500 italic col-span-full">Aucun paramètre configurable.</p>';
+            code.textContent = tool.command;
+        }
     }
 
     modal.classList.remove('hidden');
@@ -292,9 +332,11 @@ function updateCmd(tool, codeElem, inputs) {
 }
 
 window.closeModal = function() { modal.classList.add('hidden'); body.style.overflow = 'auto'; }
+
 window.copyToClipboard = function() {
-    navigator.clipboard.writeText(document.getElementById('modalCommandCode').textContent);
-    // (Ajouter feedback visuel si souhaité)
+    const code = document.getElementById('modalCommandCode');
+    if(code) navigator.clipboard.writeText(code.textContent);
 }
 
+// Start
 init();
