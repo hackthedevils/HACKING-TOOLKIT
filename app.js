@@ -24,9 +24,9 @@ const modal = document.getElementById('toolModal');
 
 // --- INITIALIZATION ---
 async function init() {
-    console.log("🚀 Démarrage V5...");
+    console.log("🚀 Démarrage V5 (Fix)...");
     
-    // 1. ACTIVER LES BOUTONS IMMÉDIATEMENT (Correction du bug)
+    // 1. ACTIVER LES BOUTONS IMMÉDIATEMENT
     setupEventListeners();
     
     // 2. Charger le thème
@@ -37,52 +37,45 @@ async function init() {
     try {
         console.log("⏳ Chargement des fichiers JSON...");
         
-        // On essaie de charger tools.json
+        // Charger tools.json
         const resTools = await fetch('tools.json');
         if (!resTools.ok) throw new Error(`Erreur tools.json: ${resTools.status}`);
         toolsData = await resTools.json();
         console.log(`✅ ${toolsData.length} outils chargés.`);
 
-        // On essaie de charger playbooks.json
+        // Charger playbooks.json
         const resPlaybooks = await fetch('playbooks.json');
         if (!resPlaybooks.ok) throw new Error(`Erreur playbooks.json: ${resPlaybooks.status}`);
         playbooksData = await resPlaybooks.json();
         console.log(`✅ ${playbooksData.length} playbooks chargés.`);
         
-        // 4. Affichage
+        // 4. Affichage initial
         renderCategories();
-        renderTools();
+        renderTools();     // Cette fonction mettra à jour le compteur automatiquement
         renderPlaybooks();
-        updateCount();
+
+        // NOTE: J'ai supprimé l'appel "updateCount()" ici car il est géré dans renderTools
 
     } catch (error) {
         console.error("❌ ERREUR CRITIQUE:", error);
-        container.innerHTML = `
-            <div class="col-span-full text-center text-red-500 py-10 border border-red-900 bg-red-900 bg-opacity-20 rounded p-4">
-                <i class="fas fa-bug text-4xl mb-4"></i>
-                <h2 class="text-xl font-bold">Erreur de chargement</h2>
-                <p class="text-sm mt-2">${error.message}</p>
-                <p class="text-xs text-gray-400 mt-4">Vérifiez la console (F12) et assurez-vous que 'tools.json' et 'playbooks.json' sont dans le même dossier.</p>
-            </div>`;
+        if(container) {
+            container.innerHTML = `
+                <div class="col-span-full text-center text-red-500 py-10 border border-red-900 bg-red-900 bg-opacity-20 rounded p-4">
+                    <i class="fas fa-bug text-4xl mb-4"></i>
+                    <h2 class="text-xl font-bold">Erreur de chargement</h2>
+                    <p class="text-sm mt-2 font-mono">${error.message}</p>
+                    <p class="text-xs text-gray-400 mt-4">Vérifiez la console (F12) et assurez-vous que 'tools.json' et 'playbooks.json' sont valides.</p>
+                </div>`;
+        }
     }
 }
 
-// --- EVENT LISTENERS (Délégués et Robustes) ---
+// --- EVENT LISTENERS ---
 function setupEventListeners() {
-    console.log("🔌 Activation des boutons...");
-
-    // 1. Navigation Tabs (Correction directe)
+    // 1. Navigation Tabs
     if(tabTools && tabPlaybooks) {
-        tabTools.addEventListener('click', (e) => { 
-            e.preventDefault(); 
-            switchTab('tools'); 
-        });
-        tabPlaybooks.addEventListener('click', (e) => { 
-            e.preventDefault(); 
-            switchTab('playbooks'); 
-        });
-    } else {
-        console.error("⚠️ Impossible de trouver les boutons des onglets dans le HTML.");
+        tabTools.addEventListener('click', (e) => { e.preventDefault(); switchTab('tools'); });
+        tabPlaybooks.addEventListener('click', (e) => { e.preventDefault(); switchTab('playbooks'); });
     }
 
     // 2. Recherche
@@ -94,9 +87,9 @@ function setupEventListeners() {
         });
     }
 
-    // 3. Clics globaux (Délégation pour les cartes et favoris)
+    // 3. Clics globaux (Délégation)
     document.addEventListener('click', (e) => {
-        // Ouvrir Modal Outil (sur la carte ou le badge dans playbook)
+        // Ouvrir Modal
         const toolCard = e.target.closest('.js-open-modal');
         if (toolCard) {
             const id = parseInt(toolCard.dataset.id);
@@ -112,9 +105,7 @@ function setupEventListeners() {
         }
 
         // Fermer Modal
-        if (e.target === modal || e.target.closest('.js-close-modal')) {
-            closeModal();
-        }
+        if (e.target === modal || e.target.closest('.js-close-modal')) closeModal();
     });
 
     // 4. Clavier
@@ -139,19 +130,18 @@ function setTheme(themeName) {
 
 // --- TABS LOGIC ---
 function switchTab(tab) {
-    console.log("Switching to tab:", tab);
     if (tab === 'tools') {
         toolsSection.classList.remove('hidden');
         playbooksSection.classList.add('hidden');
         tabTools.classList.add('active');
         tabPlaybooks.classList.remove('active');
-        categoryContainer.classList.remove('hidden');
+        if(categoryContainer) categoryContainer.classList.remove('hidden');
     } else {
         toolsSection.classList.add('hidden');
         playbooksSection.classList.remove('hidden');
         tabTools.classList.remove('active');
         tabPlaybooks.classList.add('active');
-        categoryContainer.classList.add('hidden');
+        if(categoryContainer) categoryContainer.classList.add('hidden');
     }
 }
 
@@ -160,6 +150,7 @@ function renderTools() {
     if(!container) return;
     container.innerHTML = '';
     
+    // Filtrage
     const filtered = toolsData.filter(tool => {
         const matchesSearch = tool.name.toLowerCase().includes(currentSearch) || 
                               tool.shortDesc.toLowerCase().includes(currentSearch) ||
@@ -172,8 +163,12 @@ function renderTools() {
         return matchesSearch && matchesCategory;
     });
 
+    // Mise à jour du compteur (C'est ici que ça remplace updateCount)
+    if(toolCount) toolCount.textContent = filtered.length;
+
+    // Affichage
     if (filtered.length === 0) {
-        container.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10">Aucun outil trouvé pour cette recherche.</div>`;
+        container.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10">Aucun outil trouvé.</div>`;
     } else {
         filtered.forEach(tool => {
             const isFav = favorites.includes(tool.id);
@@ -198,14 +193,16 @@ function renderTools() {
                 </div>`;
         });
     }
-    if(toolCount) toolCount.textContent = filtered.length;
 }
 
 function renderPlaybooks() {
     if(!playbooksContainer) return;
     playbooksContainer.innerHTML = '';
     
-    if(playbooksData.length === 0) return;
+    if(playbooksData.length === 0) {
+        playbooksContainer.innerHTML = `<div class="text-center text-gray-500 py-10">Aucun playbook chargé.</div>`;
+        return;
+    }
 
     const filtered = playbooksData.filter(pb => 
         pb.title.toLowerCase().includes(currentSearch) || 
@@ -266,7 +263,7 @@ function renderCategories() {
     `).join('');
 }
 
-// --- GLOBAL HELPERS (Window scope pour onclick HTML) ---
+// --- GLOBAL HELPERS ---
 window.setCategory = function(cat) { currentFilter = cat; renderTools(); }
 window.toggleFavorite = function(id, btn) {
     if(favorites.includes(id)) favorites = favorites.filter(fav => fav !== id);
@@ -280,16 +277,11 @@ window.openModal = function(id) {
     const tool = toolsData.find(t => t.id === id);
     if(!tool) return;
     
+    // Titre et infos
     document.getElementById('modalTitle').textContent = tool.name;
-    // Remplissage des champs de base
-    const catElem = document.getElementById('modalCategory');
-    if(catElem) catElem.textContent = tool.category;
-    
-    const descElem = document.getElementById('modalDesc');
-    if(descElem) descElem.textContent = tool.fullDesc;
-
-    const ethicalElem = document.getElementById('modalEthical');
-    if(ethicalElem) ethicalElem.textContent = tool.ethicalUse;
+    const catElem = document.getElementById('modalCategory'); if(catElem) catElem.textContent = tool.category;
+    const descElem = document.getElementById('modalDesc'); if(descElem) descElem.textContent = tool.fullDesc;
+    const ethElem = document.getElementById('modalEthical'); if(ethElem) ethElem.textContent = tool.ethicalUse;
     
     // Tags
     const tagsElem = document.getElementById('modalTags');
@@ -332,11 +324,10 @@ function updateCmd(tool, codeElem, inputs) {
 }
 
 window.closeModal = function() { modal.classList.add('hidden'); body.style.overflow = 'auto'; }
-
 window.copyToClipboard = function() {
     const code = document.getElementById('modalCommandCode');
     if(code) navigator.clipboard.writeText(code.textContent);
 }
 
-// Start
+// Lancement
 init();
