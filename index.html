@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ethical Hacking Toolkit - V4 Interactive</title>
+    <title>Ethical Hacking Toolkit - V4 Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,10 +13,7 @@
             theme: {
                 extend: {
                     colors: {
-                        cyber: {
-                            black: '#0d0d0d', dark: '#1a1a1a', green: '#00ff41',
-                            greenDim: '#008F11', purple: '#d600ff', text: '#e0e0e0'
-                        }
+                        cyber: { black: '#0d0d0d', dark: '#1a1a1a', green: '#00ff41', greenDim: '#008F11', purple: '#d600ff', text: '#e0e0e0' }
                     },
                     fontFamily: { mono: ['"Share Tech Mono"', 'monospace'], }
                 }
@@ -32,101 +29,69 @@
             <h1 class="text-3xl md:text-4xl font-bold text-cyber-green neon-text">
                 <i class="fas fa-terminal mr-2"></i>ETHICAL_TOOLKIT_V4
             </h1>
-            <div class="text-xs md:text-sm border border-red-500 text-red-500 px-3 py-1 rounded bg-red-900 bg-opacity-20 text-center">
+            <div class="text-xs md:text-sm border border-red-500 text-red-500 px-3 py-1 rounded bg-red-900 bg-opacity-20">
                 <i class="fas fa-exclamation-triangle mr-1"></i> AVERTISSEMENT : ÉDUCATION & PENTEST LÉGAL UNIQUEMENT
             </div>
         </div>
     </header>
 
     <main class="flex-grow container mx-auto px-4 py-8">
-        
         <div class="mb-10 space-y-6">
             <div class="relative max-w-2xl mx-auto group">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <i class="fas fa-search text-cyber-greenDim group-focus-within:text-cyber-green transition-colors"></i>
                 </div>
-                <input type="text" id="searchInput" 
-                    class="block w-full pl-10 pr-3 py-3 border-2 border-cyber-greenDim bg-cyber-dark text-cyber-green placeholder-gray-600 focus:outline-none focus:border-cyber-green focus:ring-1 focus:ring-cyber-green transition-all rounded-sm" 
-                    placeholder="Rechercher un outil, un tag ou une catégorie..." autocomplete="off">
+                <input type="text" id="searchInput" class="block w-full pl-10 pr-3 py-3 border-2 border-cyber-greenDim bg-cyber-dark text-cyber-green placeholder-gray-600 focus:outline-none focus:border-cyber-green focus:ring-1 focus:ring-cyber-green transition-all rounded-sm" placeholder="Rechercher..." autocomplete="off">
             </div>
-
-            <div class="flex flex-wrap justify-center gap-2" id="categoryContainer">
-                </div>
-            
-            <div class="text-center text-xs text-gray-500">
-                <span id="toolCount">...</span> outils répertoriés
-            </div>
+            <div class="flex flex-wrap justify-center gap-2" id="categoryContainer"></div>
+            <div class="text-center text-xs text-gray-500"><span id="toolCount">...</span> outils</div>
         </div>
 
         <div id="toolsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="col-span-full text-center text-gray-500 animate-pulse mt-10">
-                <i class="fas fa-circle-notch fa-spin text-2xl mb-2"></i><br>
-                Chargement de la base de données...
-            </div>
+            <div class="col-span-full text-center text-gray-500 animate-pulse mt-10">Chargement...</div>
         </div>
 
-        <div id="noResults" class="hidden text-center py-20 text-gray-500">
-            <i class="fas fa-bug text-4xl mb-4"></i>
-            <p class="text-xl">Aucun outil trouvé.</p>
-        </div>
+        <div id="noResults" class="hidden text-center py-20 text-gray-500"><p class="text-xl">Aucun outil trouvé.</p></div>
     </main>
 
     <footer class="border-t border-cyber-greenDim bg-cyber-black p-6 text-center text-sm text-gray-500 mt-10">
-        <p>&copy; 2024 Ethical Hacking Toolkit. Code is Law.</p>
-        <p class="text-xs mt-2">V4 Interactive Edition</p>
+        <p>&copy; 2024 Ethical Hacking Toolkit.</p>
     </footer>
 
-    <div id="toolModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-90 backdrop-blur-sm p-4 transition-opacity duration-300">
+    <div id="toolModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-90 backdrop-blur-sm p-4">
         <div class="bg-cyber-dark border-2 border-cyber-green w-full max-w-2xl rounded-sm shadow-[0_0_30px_rgba(0,255,65,0.15)] relative flex flex-col max-h-[90vh]">
-            
             <div class="p-4 border-b border-cyber-greenDim flex justify-between items-center bg-cyber-black">
-                <h2 id="modalTitle" class="text-2xl font-bold text-cyber-green neon-text">NOM_OUTIL</h2>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 transition-colors focus:outline-none">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
+                <h2 id="modalTitle" class="text-2xl font-bold text-cyber-green neon-text">...</h2>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500"><i class="fas fa-times text-2xl"></i></button>
             </div>
-
             <div class="p-6 modal-content space-y-6">
-                
                 <div class="flex flex-col gap-2">
                     <div class="flex justify-between items-start flex-wrap gap-2">
-                        <span id="modalCategory" class="inline-block px-3 py-1 text-xs font-bold text-cyber-black bg-cyber-purple rounded uppercase tracking-wider">CATEGORIE</span>
+                        <span id="modalCategory" class="inline-block px-3 py-1 text-xs font-bold text-cyber-black bg-cyber-purple rounded">CAT</span>
                         <div id="modalTags" class="flex gap-2 flex-wrap"></div>
                     </div>
                     <div id="modalLink" class="text-right"></div>
                 </div>
-                
                 <div>
                     <h3 class="text-cyber-purple text-lg mb-2 border-b border-gray-700 pb-1 font-bold">Description</h3>
-                    <p id="modalDesc" class="text-gray-300 leading-relaxed text-sm">Description complète...</p>
+                    <p id="modalDesc" class="text-gray-300 text-sm">...</p>
                 </div>
-
                 <div class="bg-gray-900 border border-gray-700 p-4 rounded-sm">
-                    <h3 class="text-cyber-green text-sm font-bold mb-4 uppercase flex items-center">
-                        <i class="fas fa-wrench mr-2"></i>Configurateur
-                    </h3>
-                    
-                    <div id="modalInputsArea" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        </div>
-
+                    <h3 class="text-cyber-green text-sm font-bold mb-4 uppercase"><i class="fas fa-wrench mr-2"></i>Configurateur</h3>
+                    <div id="modalInputsArea" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"></div>
                     <div class="relative group mt-6">
-                        <div class="absolute -top-3 left-2 bg-gray-900 px-2 text-xs text-cyber-green border border-gray-700 rounded">Commande générée</div>
-                        <pre class="bg-black border border-cyber-greenDim p-4 rounded text-cyber-green text-sm overflow-x-auto font-mono shadow-[0_0_10px_rgba(0,0,0,0.5)] pt-6"><code id="modalCommandCode">...</code></pre>
-                        
-                        <button id="copyBtn" onclick="copyToClipboard()" class="absolute top-2 right-2 bg-cyber-dark border border-gray-600 hover:border-cyber-green text-gray-300 px-3 py-1 text-xs rounded transition-all flex items-center gap-2">
-                            <i class="fas fa-copy"></i> <span>Copier</span>
-                        </button>
+                        <pre class="bg-black border border-cyber-greenDim p-4 rounded text-cyber-green text-sm overflow-x-auto font-mono pt-6"><code id="modalCommandCode">...</code></pre>
+                        <button id="copyBtn" onclick="copyToClipboard()" class="absolute top-2 right-2 bg-cyber-dark border border-gray-600 hover:border-cyber-green text-gray-300 px-3 py-1 text-xs rounded"><i class="fas fa-copy"></i> Copier</button>
                     </div>
                 </div>
-
                 <div class="bg-gray-800 bg-opacity-50 p-4 rounded border-l-4 border-cyber-purple">
-                    <h3 class="text-cyber-purple font-bold text-sm mb-1"><i class="fas fa-user-shield mr-2"></i>Cas d'usage éthique</h3>
-                    <p id="modalEthical" class="text-xs text-gray-400 italic">Exemple...</p>
+                    <h3 class="text-cyber-purple font-bold text-sm mb-1">Cas d'usage éthique</h3>
+                    <p id="modalEthical" class="text-xs text-gray-400 italic">...</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="app.js" defer></script>
+    <script src="app.js"></script>
 </body>
 </html>
