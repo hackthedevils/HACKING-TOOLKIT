@@ -1,0 +1,452 @@
+[
+  {
+    "id": 1,
+    "name": "Nmap",
+    "category": "Reconnaissance",
+    "shortDesc": "Le roi du scan réseau. Indispensable.",
+    "fullDesc": "Network Mapper est l'outil standard pour l'audit de sécurité réseau. Il découvre les hôtes, les ports ouverts, les versions de services et les OS.",
+    "command": "nmap -sC -sV -p- -T4 <IP>",
+    "ethicalUse": "Cartographie initiale d'un réseau autorisé pour identifier la surface d'attaque."
+  },
+  {
+    "id": 2,
+    "name": "Masscan",
+    "category": "Reconnaissance",
+    "shortDesc": "Le scanner de ports le plus rapide d'Internet.",
+    "fullDesc": "Capable de scanner tout Internet en moins de 6 minutes. Il est moins précis que Nmap mais beaucoup plus rapide pour la découverte initiale.",
+    "command": "masscan -p80,443,8080 192.168.1.0/24 --rate=1000",
+    "ethicalUse": "Audit rapide de très larges plages d'IP pour détecter des services exposés."
+  },
+  {
+    "id": 3,
+    "name": "Amass",
+    "category": "Reconnaissance",
+    "shortDesc": "Enumération DNS et mapping de surface d'attaque.",
+    "fullDesc": "Utilise l'OSINT et le brute-force pour découvrir des sous-domaines et visualiser l'infrastructure d'une cible.",
+    "command": "amass enum -d example.com",
+    "ethicalUse": "Découverte de sous-domaines oubliés (Shadow IT) lors d'un audit externe."
+  },
+  {
+    "id": 4,
+    "name": "Naabu",
+    "category": "Reconnaissance",
+    "shortDesc": "Scanner de ports rapide écrit en Go.",
+    "fullDesc": "Un outil moderne axé sur la vitesse et la simplicité, souvent utilisé en pipeline avec d'autres outils ProjectDiscovery.",
+    "command": "naabu -host example.com",
+    "ethicalUse": "Vérification rapide de la disponibilité des ports dans un pipeline CI/CD de sécurité."
+  },
+  {
+    "id": 5,
+    "name": "RustScan",
+    "category": "Reconnaissance",
+    "shortDesc": "Scanner de ports ultra-rapide boosté par Nmap.",
+    "fullDesc": "Scan les 65k ports en quelques secondes puis passe les résultats à Nmap pour l'analyse de version.",
+    "command": "rustscan -a <IP> -- -sC -sV",
+    "ethicalUse": "Accélérer la phase de reconnaissance lors des CTF ou pentests limités en temps."
+  },
+  {
+    "id": 6,
+    "name": "Burp Suite",
+    "category": "Web",
+    "shortDesc": "L'outil ultime pour le test d'intrusion web.",
+    "fullDesc": "Proxy d'interception, scanner, intruder et repeater. Il permet de manipuler tout le trafic HTTP entre le navigateur et le serveur.",
+    "command": "burpsuite & (GUI)",
+    "ethicalUse": "Analyse manuelle approfondie des requêtes pour trouver des failles logiques."
+  },
+  {
+    "id": 7,
+    "name": "OWASP ZAP",
+    "category": "Web",
+    "shortDesc": "Alternative Open Source à Burp Suite.",
+    "fullDesc": "Zed Attack Proxy est maintenu par l'OWASP. Excellent pour l'automatisation des scans de vulnérabilités web.",
+    "command": "zaproxy & (GUI)",
+    "ethicalUse": "Scans automatisés gratuits pour les développeurs et auditeurs."
+  },
+  {
+    "id": 8,
+    "name": "Gobuster",
+    "category": "Web",
+    "shortDesc": "Brute-force d'URIs et de DNS ultra rapide.",
+    "fullDesc": "Écrit en Go, il est utilisé pour trouver des répertoires cachés, des fichiers et des sous-domaines via wordlists.",
+    "command": "gobuster dir -u http://target.com -w /usr/share/wordlists/dirb/common.txt",
+    "ethicalUse": "Découverte de pages d'administration ou de backups oubliés sur un serveur web."
+  },
+  {
+    "id": 9,
+    "name": "Ffuf",
+    "category": "Web",
+    "shortDesc": "Fuzz Faster U Fool. Le fuzzer web moderne.",
+    "fullDesc": "Extrêmement rapide et flexible pour le fuzzing web (paramètres, headers, répertoires).",
+    "command": "ffuf -u http://target.com/FUZZ -w wordlist.txt",
+    "ethicalUse": "Recherche de paramètres cachés ou d'endpoints API non documentés."
+  },
+  {
+    "id": 10,
+    "name": "SQLMap",
+    "category": "Web",
+    "shortDesc": "Injection SQL automatique.",
+    "fullDesc": "Détecte et exploite les failles d'injection SQL pour extraire des bases de données ou prendre le contrôle du serveur.",
+    "command": "sqlmap -u 'http://site.com/id=1' --dbs",
+    "ethicalUse": "Vérifier si les points d'entrée d'une application sont vulnérables aux injections SQL."
+  },
+  {
+    "id": 11,
+    "name": "Nikto",
+    "category": "Web",
+    "shortDesc": "Scanner de vulnérabilités web classique.",
+    "fullDesc": "Recherche des fichiers dangereux, des versions de serveurs obsolètes et des problèmes de configuration.",
+    "command": "nikto -h http://target.com",
+    "ethicalUse": "Scan rapide pour identifier les mauvaises configurations serveur basiques."
+  },
+  {
+    "id": 12,
+    "name": "WPScan",
+    "category": "Web",
+    "shortDesc": "Scanner de sécurité pour WordPress.",
+    "fullDesc": "Identifie les plugins vulnérables, les thèmes et les utilisateurs sur les sites WordPress.",
+    "command": "wpscan --url http://blog.com --enumerate p",
+    "ethicalUse": "Audit de sécurité spécifique pour les clients utilisant WordPress."
+  },
+  {
+    "id": 13,
+    "name": "Nuclei",
+    "category": "Web",
+    "shortDesc": "Scanner de vulnérabilités basé sur des templates.",
+    "fullDesc": "Très puissant et communautaire. Il envoie des requêtes basées sur des modèles YAML pour détecter des CVE récentes.",
+    "command": "nuclei -u http://target.com",
+    "ethicalUse": "Détection rapide de CVE massivement exploitées (ex: Log4j) sur une infrastructure."
+  },
+  {
+    "id": 14,
+    "name": "Commix",
+    "category": "Web",
+    "shortDesc": "Automatisation des injections de commandes OS.",
+    "fullDesc": "Similaire à SQLMap, mais spécialisé pour trouver et exploiter les failles 'Command Injection'.",
+    "command": "commix --url='http://site.com?param=val'",
+    "ethicalUse": "Preuve de concept pour démontrer l'exécution de code à distance (RCE)."
+  },
+  {
+    "id": 15,
+    "name": "John the Ripper",
+    "category": "Password",
+    "shortDesc": "Le couteau suisse du craquage de mots de passe.",
+    "fullDesc": "Capable de détecter et craquer des centaines de types de hachages (MD5, SHA, etc.) CPU-based.",
+    "command": "john --wordlist=rockyou.txt hash.txt",
+    "ethicalUse": "Audit de la robustesse des mots de passe stockés."
+  },
+  {
+    "id": 16,
+    "name": "Hashcat",
+    "category": "Password",
+    "shortDesc": "Le craqueur de mots de passe le plus rapide (GPU).",
+    "fullDesc": "Utilise la carte graphique pour tester des millions de combinaisons par seconde. Supporte des règles complexes.",
+    "command": "hashcat -m 0 -a 0 hash.txt rockyou.txt",
+    "ethicalUse": "Test de résistance des hashs contre des attaques par force brute modernes."
+  },
+  {
+    "id": 17,
+    "name": "Hydra",
+    "category": "Password",
+    "shortDesc": "Craqueur de login réseau rapide.",
+    "fullDesc": "Attaque par dictionnaire en ligne contre de nombreux protocoles (SSH, FTP, HTTP, SMB, etc.).",
+    "command": "hydra -l user -P passlist.txt ssh://192.168.1.1",
+    "ethicalUse": "Test des politiques de verrouillage de compte et des mots de passe faibles."
+  },
+  {
+    "id": 18,
+    "name": "CeWL",
+    "category": "Password",
+    "shortDesc": "Générateur de wordlist personnalisé.",
+    "fullDesc": "Scrape un site web pour créer une liste de mots basée sur le contenu de la page (utile pour le contexte).",
+    "command": "cewl -w wordlist.txt -d 2 -m 5 http://site.com",
+    "ethicalUse": "Création de dictionnaires pertinents pour un audit spécifique."
+  },
+  {
+    "id": 19,
+    "name": "Wireshark",
+    "category": "Sniffing",
+    "shortDesc": "L'analyseur de protocole réseau standard.",
+    "fullDesc": "Permet de capturer et d'inspecter les paquets réseaux en détail. Indispensable pour le debug et l'analyse forensique.",
+    "command": "wireshark (GUI)",
+    "ethicalUse": "Analyse de trafic pour comprendre les protocoles ou détecter des anomalies."
+  },
+  {
+    "id": 20,
+    "name": "Bettercap",
+    "category": "Sniffing",
+    "shortDesc": "Le couteau suisse du Man-In-The-Middle.",
+    "fullDesc": "Outil moderne et modulaire pour le MITM, le sniffing d'identifiants, et les attaques WiFi/BLE.",
+    "command": "bettercap -iface eth0",
+    "ethicalUse": "Démonstration des risques d'arp spoofing sur un réseau local."
+  },
+  {
+    "id": 21,
+    "name": "Responder",
+    "category": "Sniffing",
+    "shortDesc": "Empoisonneur LLMNR/NBT-NS.",
+    "fullDesc": "Écoute les requêtes de noms sur le réseau et répond pour voler les hashs NTLMv2 des machines Windows.",
+    "command": "responder -I eth0 -dw",
+    "ethicalUse": "Audit interne pour démontrer les risques des protocoles de découverte Windows par défaut."
+  },
+  {
+    "id": 22,
+    "name": "Mimikatz",
+    "category": "Post-Exploitation",
+    "shortDesc": "L'outil légendaire pour l'extraction d'identifiants Windows.",
+    "fullDesc": "Peut extraire les mots de passe en clair, les hashs, et les tickets Kerberos de la mémoire (LSASS).",
+    "command": "privilege::debug token::elevate lsadump::sam",
+    "ethicalUse": "Vérification de la sécurité des endpoints et des risques de vol d'identifiants."
+  },
+  {
+    "id": 23,
+    "name": "BloodHound",
+    "category": "Post-Exploitation",
+    "shortDesc": "Cartographie des relations Active Directory.",
+    "fullDesc": "Utilise la théorie des graphes pour révéler les chemins d'attaque cachés vers l'Admin de Domaine.",
+    "command": "sharpHound.exe (collector)",
+    "ethicalUse": "Audit d'architecture AD pour identifier et fermer les chemins d'élévation de privilèges."
+  },
+  {
+    "id": 24,
+    "name": "Evil-WinRM",
+    "category": "Post-Exploitation",
+    "shortDesc": "Shell interactif Windows via WinRM.",
+    "fullDesc": "L'outil ultime pour interagir avec des machines Windows une fois des identifiants obtenus.",
+    "command": "evil-winrm -i <IP> -u user -p pass",
+    "ethicalUse": "Administration à distance légitime et validation d'accès."
+  },
+  {
+    "id": 25,
+    "name": "CrackMapExec",
+    "category": "Post-Exploitation",
+    "shortDesc": "Le 'couteau suisse' pour Pentest Active Directory.",
+    "fullDesc": "Permet de scanner, attaquer et administrer massivement des réseaux AD (SMB, WinRM, MSSQL).",
+    "command": "crackmapexec smb 192.168.1.0/24 -u user -p pass --users",
+    "ethicalUse": "Audit rapide de la surface d'attaque interne et propagation latérale."
+  },
+  {
+    "id": 26,
+    "name": "LinPEAS",
+    "category": "Post-Exploitation",
+    "shortDesc": "Script d'énumération de privilèges Linux.",
+    "fullDesc": "Recherche automatiquement les mauvaises configurations permettant de devenir Root.",
+    "command": "./linpeas.sh",
+    "ethicalUse": "Gain de temps lors de la recherche de vecteurs d'escalade de privilèges."
+  },
+  {
+    "id": 27,
+    "name": "Ligolo-ng",
+    "category": "Tunneling",
+    "shortDesc": "Outil de tunneling/pivoting nouvelle génération.",
+    "fullDesc": "Plus performant que Chisel, il utilise des interfaces TUN pour un pivoting réseau complet et simple.",
+    "command": "./proxy -selfcert (serveur) / ./agent (cible)",
+    "ethicalUse": "Accéder à des réseaux segmentés lors d'un audit interne."
+  },
+  {
+    "id": 28,
+    "name": "Metasploit",
+    "category": "Exploitation",
+    "shortDesc": "Le framework d'exploitation le plus populaire.",
+    "fullDesc": "Contient des milliers d'exploits, de payloads et d'outils auxiliaires pour tester les vulnérabilités.",
+    "command": "msfconsole",
+    "ethicalUse": "Validation de vulnérabilités et tests de pénétration complets."
+  },
+  {
+    "id": 29,
+    "name": "Searchsploit",
+    "category": "Exploitation",
+    "shortDesc": "Copie locale d'Exploit-DB.",
+    "fullDesc": "Permet de rechercher des exploits connus directement depuis le terminal, hors ligne.",
+    "command": "searchsploit apache 2.4",
+    "ethicalUse": "Recherche rapide de PoC pour des services obsolètes détectés."
+  },
+  {
+    "id": 30,
+    "name": "Ghidra",
+    "category": "Reverse",
+    "shortDesc": "Suite de reverse engineering de la NSA.",
+    "fullDesc": "Désassembleur et décompilateur puissant, gratuit et open source. Concurrence IDA Pro.",
+    "command": "./ghidraRun",
+    "ethicalUse": "Analyse de malware ou audit de code binaire fermé."
+  },
+  {
+    "id": 31,
+    "name": "Radare2",
+    "category": "Reverse",
+    "shortDesc": "Framework de reverse engineering en CLI.",
+    "fullDesc": "Très léger, puissant et scriptable. Idéal pour les analyses rapides ou sur des systèmes sans GUI.",
+    "command": "r2 -d binary",
+    "ethicalUse": "Analyse de binaires et CTF Pwn/Reverse."
+  },
+  {
+    "id": 32,
+    "name": "ImHex",
+    "category": "Reverse",
+    "shortDesc": "Éditeur Hexadécimal moderne.",
+    "fullDesc": "Interface magnifique, pattern matching, et décodage de données intégré.",
+    "command": "imhex (GUI)",
+    "ethicalUse": "Analyse bas niveau de fichiers et structures de données."
+  },
+  {
+    "id": 33,
+    "name": "Sherlock",
+    "category": "OSINT",
+    "shortDesc": "Chasseur de noms d'utilisateur.",
+    "fullDesc": "Recherche un pseudo spécifique sur des centaines de réseaux sociaux pour trouver des comptes liés.",
+    "command": "python3 sherlock.py username",
+    "ethicalUse": "Investigation numérique et vérification de l'empreinte numérique."
+  },
+  {
+    "id": 34,
+    "name": "Shodan CLI",
+    "category": "OSINT",
+    "shortDesc": "Moteur de recherche pour les objets connectés.",
+    "fullDesc": "Permet de rechercher des serveurs, caméras, et équipements industriels exposés sur Internet.",
+    "command": "shodan host 8.8.8.8",
+    "ethicalUse": "Surveillance de la surface d'attaque externe d'une organisation."
+  },
+  {
+    "id": 35,
+    "name": "TheHarvester",
+    "category": "OSINT",
+    "shortDesc": "Collecte d'emails et de domaines.",
+    "fullDesc": "Scrape Google, LinkedIn, Bing, etc. pour trouver des emails et des sous-domaines d'une organisation.",
+    "command": "theHarvester -d company.com -b google",
+    "ethicalUse": "Simulation de phase de reconnaissance pour une campagne de phishing éthique."
+  },
+  {
+    "id": 36,
+    "name": "Gophish",
+    "category": "Social Eng.",
+    "shortDesc": "Plateforme de phishing open source.",
+    "fullDesc": "Permet de créer et gérer des campagnes de phishing simulées pour tester la sensibilisation des employés.",
+    "command": "./gophish",
+    "ethicalUse": "Campagnes de sensibilisation et tests d'ingénierie sociale approuvés."
+  },
+  {
+    "id": 37,
+    "name": "MobSF",
+    "category": "Mobile",
+    "shortDesc": "Mobile Security Framework.",
+    "fullDesc": "Outil tout-en-un pour l'analyse statique et dynamique d'applications Android et iOS (APK/IPA).",
+    "command": "./run.sh 127.0.0.1:8000",
+    "ethicalUse": "Audit de sécurité d'applications mobiles avant publication."
+  },
+  {
+    "id": 38,
+    "name": "Frida",
+    "category": "Mobile",
+    "shortDesc": "Toolkit d'instrumentation dynamique.",
+    "fullDesc": "Permet d'injecter du JavaScript dans des applications natives (Windows, macOS, Android, iOS) pour modifier leur comportement en temps réel.",
+    "command": "frida -U -f com.example.app",
+    "ethicalUse": "Bypass de SSL Pinning ou détection de Root lors d'audits mobiles."
+  },
+  {
+    "id": 39,
+    "name": "ScoutSuite",
+    "category": "Cloud",
+    "shortDesc": "Outil d'audit de sécurité multi-cloud.",
+    "fullDesc": "Scanne les environnements AWS, Azure, GCP pour détecter les mauvaises configurations de sécurité.",
+    "command": "scout aws",
+    "ethicalUse": "Audit de conformité et sécurité des environnements cloud."
+  },
+  {
+    "id": 40,
+    "name": "Gitleaks",
+    "category": "Cloud/DevOps",
+    "shortDesc": "Détecteur de secrets dans git.",
+    "fullDesc": "Scanne l'historique des repos git pour trouver des clés API, des mots de passe ou des tokens commités par erreur.",
+    "command": "gitleaks detect --source=.",
+    "ethicalUse": "Nettoyage de repository et prévention de fuite de données."
+  },
+  {
+    "id": 41,
+    "name": "Aircrack-ng",
+    "category": "Wireless",
+    "shortDesc": "Suite complète pour l'audit WiFi.",
+    "fullDesc": "Monitoring, attaque (replay), craquage de clés WEP et WPA-PSK.",
+    "command": "airmon-ng start wlan0",
+    "ethicalUse": "Test de la robustesse des clés WiFi d'entreprise."
+  },
+  {
+    "id": 42,
+    "name": "Kismet",
+    "category": "Wireless",
+    "shortDesc": "Détecteur de réseau sans fil passif.",
+    "fullDesc": "Sniffer WiFi, Bluetooth et RF qui détecte les réseaux sans envoyer de paquets (indétectable).",
+    "command": "kismet",
+    "ethicalUse": "Détection de Rogue AP (Points d'accès pirates) dans une entreprise."
+  },
+  {
+    "id": 43,
+    "name": "Wifite2",
+    "category": "Wireless",
+    "shortDesc": "Automatisation des attaques WiFi.",
+    "fullDesc": "Wrapper Python qui automatise les outils comme aircrack, reaver, etc. pour auditer plusieurs réseaux à la suite.",
+    "command": "wifite",
+    "ethicalUse": "Audit rapide de la sécurité WiFi environnante."
+  },
+  {
+    "id": 44,
+    "name": "CyberChef",
+    "category": "Utils",
+    "shortDesc": "Le 'couteau suisse' pour les données.",
+    "fullDesc": "Application web pour encoder, décoder, chiffrer, déchiffrer et analyser des formats de données complexes.",
+    "command": "Utilisation via navigateur",
+    "ethicalUse": "Décodage rapide de payloads base64 ou de shellcodes obfusqués."
+  },
+  {
+    "id": 45,
+    "name": "Pwncat-cs",
+    "category": "Post-Exploitation",
+    "shortDesc": "Netcat sous stéroïdes avec gestion de shell.",
+    "fullDesc": "Transforme un reverse shell basique en un shell stable, avec upload/download de fichiers et énumération automatique.",
+    "command": "pwncat-cs -lp 4444",
+    "ethicalUse": "Stabilisation de connexions lors de CTF ou pentests."
+  },
+  {
+    "id": 46,
+    "name": "Chisel",
+    "category": "Tunneling",
+    "shortDesc": "Tunnel TCP/UDP via HTTP.",
+    "fullDesc": "Permet de passer outre les pare-feux restrictifs en encapsulant le trafic dans du HTTP.",
+    "command": "chisel server -p 8000 --reverse",
+    "ethicalUse": "Accès à des zones restreintes du réseau via un serveur web compromis."
+  },
+  {
+    "id": 47,
+    "name": "Netcat (nc)",
+    "category": "Utils",
+    "shortDesc": "Le couteau suisse TCP/IP original.",
+    "fullDesc": "Outil simple pour lire et écrire des données à travers le réseau. Utilisé pour tout : chat, transfert de fichier, reverse shell.",
+    "command": "nc -lvnp 4444",
+    "ethicalUse": "Debugging réseau et établissement de connexions simples."
+  },
+  {
+    "id": 48,
+    "name": "Socat",
+    "category": "Utils",
+    "shortDesc": "Netcat bidirectionnel avancé.",
+    "fullDesc": "Comme Netcat mais supporte les fichiers, pipes, périphériques, SSL, etc. Très puissant pour le port forwarding.",
+    "command": "socat TCP-LISTEN:80,fork TCP:target:80",
+    "ethicalUse": "Redirection de trafic complexe et contournement de restrictions."
+  },
+  {
+    "id": 49,
+    "name": "TruffleHog",
+    "category": "Cloud/DevOps",
+    "shortDesc": "Chasseur de secrets haute entropie.",
+    "fullDesc": "Scanne Git, systèmes de fichiers et buckets S3 pour trouver des clés secrètes.",
+    "command": "trufflehog git https://github.com/user/repo",
+    "ethicalUse": "Audit de code source pour prévenir les fuites de secrets."
+  },
+  {
+    "id": 50,
+    "name": "Peirates",
+    "category": "Cloud",
+    "shortDesc": "Outil d'exploitation Kubernetes.",
+    "fullDesc": "Outil conçu pour pentester et élever ses privilèges dans un cluster Kubernetes.",
+    "command": "./peirates",
+    "ethicalUse": "Audit de sécurité des infrastructures conteneurisées (K8s)."
+  }
+]
