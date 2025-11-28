@@ -1,0 +1,27 @@
+body {
+    background-color: #050505;
+    color: #e0e0e0;
+    font-family: 'Share Tech Mono', monospace;
+    background-image: radial-gradient(#112211 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+/* Effet de lueur néon */
+.neon-border { box-shadow: 0 0 5px #00ff41, inset 0 0 5px #00ff41; }
+.neon-text { text-shadow: 0 0 5px #00ff41; }
+.neon-purple-text { text-shadow: 0 0 5px #d600ff; }
+
+/* Scrollbar customisée */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0d0d0d; }
+::-webkit-scrollbar-thumb { background: #008F11; }
+::-webkit-scrollbar-thumb:hover { background: #00ff41; }
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.tool-card { animation: fadeIn 0.3s ease-out forwards; }
+
+.modal-content { max-height: 70vh; overflow-y: auto; }
