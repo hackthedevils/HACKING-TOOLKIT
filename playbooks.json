@@ -2,61 +2,34 @@
   {
     "id": "wifi-audit",
     "title": "Audit Réseau WiFi (WPA2)",
-    "description": "Workflow complet pour tester la sécurité d'un réseau sans fil, de l'interception au craquage.",
+    "description": "Workflow complet pour tester la sécurité d'un réseau sans fil.",
     "level": "Intermédiaire",
     "steps": [
       { "step": 1, "desc": "Passer la carte en mode Monitor.", "toolId": 9 },
-      { "step": 2, "desc": "Scanner les réseaux environnants pour trouver la cible (BSSID/Channel).", "toolId": 9 },
-      { "step": 3, "desc": "Capturer le Handshake WPA (nécessite un client connecté).", "toolId": 9 },
-      { "step": 4, "desc": "Tenter de craquer le handshake avec une wordlist.", "toolId": 9 }
+      { "step": 2, "desc": "Scanner les réseaux environnants.", "toolId": 9 },
+      { "step": 3, "desc": "Capturer le Handshake WPA.", "toolId": 9 }
     ]
   },
   {
     "id": "web-recon",
     "title": "Reconnaissance Web Passive",
-    "description": "Collecter un maximum d'informations sur une cible web sans l'attaquer directement.",
+    "description": "Collecter des informations sans attaquer.",
     "level": "Débutant",
     "steps": [
-      { "step": 1, "desc": "Identifier les technologies du site (CMS, Serveur).", "toolId": 69 },
-      { "step": 2, "desc": "Découvrir les sous-domaines via OSINT.", "toolId": 44 },
-      { "step": 3, "desc": "Vérifier quels sous-domaines sont actifs (HTTP Probe).", "toolId": 81 },
-      { "step": 4, "desc": "Rechercher des fichiers sensibles exposés (Google Dorks / Git).", "toolId": 46 }
+      { "step": 1, "desc": "Identifier les technologies.", "toolId": 69 },
+      { "step": 2, "desc": "Découvrir les sous-domaines.", "toolId": 44 },
+      { "step": 3, "desc": "Vérifier les sous-domaines actifs.", "toolId": 81 }
     ]
   },
   {
     "id": "ad-audit",
-    "title": "Audit Active Directory (Interne)",
-    "description": "Scénario classique une fois connecté au réseau interne d'une entreprise.",
+    "title": "Audit Active Directory",
+    "description": "Scénario interne classique.",
     "level": "Avancé",
     "steps": [
-      { "step": 1, "desc": "Scanner le réseau pour identifier les machines Windows/SMB.", "toolId": 39 },
-      { "step": 2, "desc": "Écouter le réseau pour capturer des hashs (LLMNR Poisoning).", "toolId": 22 },
-      { "step": 3, "desc": "Si identifiants obtenus : Cartographier le domaine.", "toolId": 20 },
-      { "step": 4, "desc": "Tenter une latéralisation ou élévation de privilèges.", "toolId": 23 }
-    ]
-  },
-  {
-    "id": "wordpress-hack",
-    "title": "Pentest WordPress",
-    "description": "Méthodologie spécifique pour auditer un site utilisant le CMS WordPress.",
-    "level": "Débutant",
-    "steps": [
-      { "step": 1, "desc": "Scan global des vulnérabilités (Thèmes/Plugins).", "toolId": 31 },
-      { "step": 2, "desc": "Enumération des utilisateurs.", "toolId": 31 },
-      { "step": 3, "desc": "Brute-force du login admin (si non protégé).", "toolId": 31 },
-      { "step": 4, "desc": "Si accès obtenu : Upload d'un reverse shell.", "toolId": 3 }
-    ]
-  },
-  {
-    "id": "subdomain-takeover",
-    "title": "Chasse aux Sous-domaines",
-    "description": "Trouver des sous-domaines pointant vers des services tiers abandonnés.",
-    "level": "Intermédiaire",
-    "steps": [
-      { "step": 1, "desc": "Lister tous les sous-domaines (Passif + Actif).", "toolId": 27 },
-      { "step": 2, "desc": "Résoudre les DNS pour trouver les CNAMES.", "toolId": 11 },
-      { "step": 3, "desc": "Tester les codes de réponse HTTP (404 indicateur).", "toolId": 81 },
-      { "step": 4, "desc": "Scanner spécifiquement pour le Takeover.", "toolId": 43 }
+      { "step": 1, "desc": "Scanner le réseau SMB.", "toolId": 39 },
+      { "step": 2, "desc": "Empoisonnement LLMNR.", "toolId": 22 },
+      { "step": 3, "desc": "Cartographie Bloodhound.", "toolId": 20 }
     ]
   }
 ]
