@@ -1,35 +1,481 @@
 [
   {
-    "id": "wifi-audit",
-    "title": "Audit Réseau WiFi (WPA2)",
-    "description": "Workflow complet pour tester la sécurité d'un réseau sans fil.",
+    "id": "ext-recon-passive",
+    "title": "Reconnaissance Externe Passive",
+    "description": "Collecter des infos sans toucher l'infrastructure cible (OSINT).",
+    "level": "Débutant",
+    "steps": [
+      { "step": 1, "desc": "Identifier les technos du site.", "toolId": 69 },
+      { "step": 2, "desc": "Récupérer les emails et employés.", "toolId": 46 },
+      { "step": 3, "desc": "Chercher les serveurs exposés via Shodan.", "toolId": 38 },
+      { "step": 4, "desc": "Visualiser les liens entre entités.", "toolId": 70 }
+    ]
+  },
+  {
+    "id": "ext-recon-active",
+    "title": "Reconnaissance Externe Active",
+    "description": "Interagir avec la cible pour cartographier la surface d'attaque.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Scanner complet des ports (lent mais discret).", "toolId": 1 },
+      { "step": 2, "desc": "Découverte de sous-domaines par brute-force.", "toolId": 27 },
+      { "step": 3, "desc": "Vérifier quels sous-domaines répondent (HTTP).", "toolId": 81 },
+      { "step": 4, "desc": "Détecter la présence d'un WAF.", "toolId": 85 }
+    ]
+  },
+  {
+    "id": "web-discovery",
+    "title": "Découverte Web & Fuzzing",
+    "description": "Trouver des fichiers cachés et des endpoints API.",
+    "level": "Débutant",
+    "steps": [
+      { "step": 1, "desc": "Fuzzing de répertoires rapide.", "toolId": 24 },
+      { "step": 2, "desc": "Fuzzing de sous-domaines.", "toolId": 11 },
+      { "step": 3, "desc": "Recherche de fichiers de backup/config.", "toolId": 52 }
+    ]
+  },
+  {
+    "id": "web-sqli",
+    "title": "Exploitation Injection SQL",
+    "description": "De la détection à l'extraction de la base de données.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Identifier les paramètres URL suspects.", "toolId": 2 },
+      { "step": 2, "desc": "Tester l'injection automatiquement.", "toolId": 7 },
+      { "step": 3, "desc": "Extraire les tables et colonnes.", "toolId": 7 },
+      { "step": 4, "desc": "Dumper les hashs de mots de passe.", "toolId": 7 }
+    ]
+  },
+  {
+    "id": "web-xss",
+    "title": "Chasse aux XSS (Cross-Site Scripting)",
+    "description": "Identifier et exploiter les failles XSS.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Scanner les paramètres pour XSS réfléchi.", "toolId": 61 },
+      { "step": 2, "desc": "Intercepter et modifier les requêtes.", "toolId": 2 },
+      { "step": 3, "desc": "Hooker le navigateur de la victime.", "toolId": 19 },
+      { "step": 4, "desc": "Exécuter des commandes via le navigateur.", "toolId": 19 }
+    ]
+  },
+  {
+    "id": "web-cms-wp",
+    "title": "Audit WordPress complet",
+    "description": "Workflow spécifique pour les sites WordPress.",
+    "level": "Débutant",
+    "steps": [
+      { "step": 1, "desc": "Identifier la version WP et le thème.", "toolId": 31 },
+      { "step": 2, "desc": "Lister les utilisateurs (Enumeration).", "toolId": 31 },
+      { "step": 3, "desc": "Brute-force du compte admin.", "toolId": 31 },
+      { "step": 4, "desc": "Scanner les plugins vulnérables.", "toolId": 31 }
+    ]
+  },
+  {
+    "id": "net-internal-scan",
+    "title": "Scan Réseau Interne (LAN)",
+    "description": "Vous êtes branché sur le réseau, que faire ?",
+    "level": "Débutant",
+    "steps": [
+      { "step": 1, "desc": "Découverte des hôtes via ARP (Silencieux).", "toolId": 82 },
+      { "step": 2, "desc": "Découverte passive (écoute du trafic).", "toolId": 83 },
+      { "step": 3, "desc": "Scan de ports rapide sur les cibles trouvées.", "toolId": 12 },
+      { "step": 4, "desc": "Scan de services détaillé sur les ports ouverts.", "toolId": 1 }
+    ]
+  },
+  {
+    "id": "net-mitm",
+    "title": "Attaque Man-In-The-Middle",
+    "description": "Interception de trafic sur un réseau local.",
+    "level": "Avancé",
+    "steps": [
+      { "step": 1, "desc": "Scanner le réseau pour identifier la cible et la Gateway.", "toolId": 29 },
+      { "step": 2, "desc": "Lancer l'ARP Spoofing.", "toolId": 29 },
+      { "step": 3, "desc": "Analyser le trafic capturé (HTTP/DNS).", "toolId": 29 },
+      { "step": 4, "desc": "Analyser les fichiers .pcap générés.", "toolId": 4 }
+    ]
+  },
+  {
+    "id": "wifi-wpa2",
+    "title": "Craquage WiFi WPA2",
+    "description": "Méthode standard pour pirater un réseau WiFi sécurisé.",
     "level": "Intermédiaire",
     "steps": [
       { "step": 1, "desc": "Passer la carte en mode Monitor.", "toolId": 9 },
-      { "step": 2, "desc": "Scanner les réseaux environnants.", "toolId": 9 },
-      { "step": 3, "desc": "Capturer le Handshake WPA.", "toolId": 9 }
+      { "step": 2, "desc": "Scanner les réseaux (Airodump).", "toolId": 9 },
+      { "step": 3, "desc": "Deauth des clients pour forcer le Handshake.", "toolId": 9 },
+      { "step": 4, "desc": "Brute-force du fichier .cap.", "toolId": 9 }
     ]
   },
   {
-    "id": "web-recon",
-    "title": "Reconnaissance Web Passive",
-    "description": "Collecter des informations sans attaquer.",
-    "level": "Débutant",
-    "steps": [
-      { "step": 1, "desc": "Identifier les technologies.", "toolId": 69 },
-      { "step": 2, "desc": "Découvrir les sous-domaines.", "toolId": 44 },
-      { "step": 3, "desc": "Vérifier les sous-domaines actifs.", "toolId": 81 }
-    ]
-  },
-  {
-    "id": "ad-audit",
-    "title": "Audit Active Directory",
-    "description": "Scénario interne classique.",
+    "id": "wifi-rogue-ap",
+    "title": "Rogue Access Point (Evil Twin)",
+    "description": "Créer un faux point d'accès pour voler des identifiants.",
     "level": "Avancé",
     "steps": [
-      { "step": 1, "desc": "Scanner le réseau SMB.", "toolId": 39 },
-      { "step": 2, "desc": "Empoisonnement LLMNR.", "toolId": 22 },
-      { "step": 3, "desc": "Cartographie Bloodhound.", "toolId": 20 }
+      { "step": 1, "desc": "Configurer le faux point d'accès.", "toolId": 30 },
+      { "step": 2, "desc": "Déconnecter les utilisateurs du vrai WiFi (Jamming).", "toolId": 97 },
+      { "step": 3, "desc": "Attendre la connexion des victimes.", "toolId": 30 },
+      { "step": 4, "desc": "Capturer les identifiants via page captive.", "toolId": 30 }
+    ]
+  },
+  {
+    "id": "ad-initial-access",
+    "title": "AD: Accès Initial & Recon",
+    "description": "Premiers pas dans un environnement Active Directory.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Empoisonnement LLMNR/NBT-NS.", "toolId": 22 },
+      { "step": 2, "desc": "Craquer les hashs NTLMv2 capturés.", "toolId": 6 },
+      { "step": 3, "desc": "Scanner le réseau pour le SMB Signing.", "toolId": 39 },
+      { "step": 4, "desc": "Tester les identifiants sur tout le réseau.", "toolId": 39 }
+    ]
+  },
+  {
+    "id": "ad-mapping",
+    "title": "AD: Cartographie & Lateral Movement",
+    "description": "Comprendre le domaine et devenir Domain Admin.",
+    "level": "Avancé",
+    "steps": [
+      { "step": 1, "desc": "Collecter les données du domaine.", "toolId": 20 },
+      { "step": 2, "desc": "Visualiser le chemin vers Domain Admin.", "toolId": 20 },
+      { "step": 3, "desc": "Dumper les secrets (LSASS) sur une machine compromise.", "toolId": 15 },
+      { "step": 4, "desc": "Pass-the-Hash vers la cible suivante.", "toolId": 23 }
+    ]
+  },
+  {
+    "id": "pass-cracking-cpu",
+    "title": "Craquage de Mots de Passe (CPU)",
+    "description": "Optimisé pour les hashs complexes ou formats rares.",
+    "level": "Débutant",
+    "steps": [
+      { "step": 1, "desc": "Identifier le type de hash.", "toolId": 88 },
+      { "step": 2, "desc": "Préparer une wordlist personnalisée.", "toolId": 60 },
+      { "step": 3, "desc": "Lancer l'attaque par dictionnaire.", "toolId": 5 },
+      { "step": 4, "desc": "Appliquer des règles de mutation.", "toolId": 5 }
+    ]
+  },
+  {
+    "id": "pass-cracking-gpu",
+    "title": "Craquage Haute Vitesse (GPU)",
+    "description": "Pour les hashs rapides (MD5, NTLM) nécessitant une carte graphique.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Identifier le mode Hashcat.", "toolId": 88 },
+      { "step": 2, "desc": "Lancer une attaque par masque (Brute-force intelligent).", "toolId": 6 },
+      { "step": 3, "desc": "Lancer une attaque combinator (Dico + Dico).", "toolId": 6 },
+      { "step": 4, "desc": "Vérifier les résultats dans le potfile.", "toolId": 6 }
+    ]
+  },
+  {
+    "id": "bruteforce-online",
+    "title": "Attaque Brute-force en Ligne",
+    "description": "Attaquer des services exposés (SSH, FTP, RDP).",
+    "level": "Débutant",
+    "steps": [
+      { "step": 1, "desc": "Vérifier que le service est actif.", "toolId": 1 },
+      { "step": 2, "desc": "Générer une liste d'utilisateurs potentiels.", "toolId": 17 },
+      { "step": 3, "desc": "Lancer Hydra sur le service.", "toolId": 8 },
+      { "step": 4, "desc": "Tester les accès trouvés.", "toolId": 16 }
+    ]
+  },
+  {
+    "id": "mobile-android-static",
+    "title": "Audit Android Statique",
+    "description": "Analyser une application sans l'exécuter.",
+    "level": "Débutant",
+    "steps": [
+      { "step": 1, "desc": "Décompiler l'APK pour lire le code.", "toolId": 56 },
+      { "step": 2, "desc": "Scanner l'APK pour les secrets hardcodés.", "toolId": 32 },
+      { "step": 3, "desc": "Analyser le AndroidManifest.xml.", "toolId": 32 },
+      { "step": 4, "desc": "Vérifier les permissions demandées.", "toolId": 32 }
+    ]
+  },
+  {
+    "id": "mobile-android-dynamic",
+    "title": "Audit Android Dynamique",
+    "description": "Manipuler l'application pendant qu'elle tourne.",
+    "level": "Avancé",
+    "steps": [
+      { "step": 1, "desc": "Connecter le téléphone/émulateur via ADB.", "toolId": 94 },
+      { "step": 2, "desc": "Bypasser le SSL Pinning.", "toolId": 33 },
+      { "step": 3, "desc": "Hooker les fonctions sensibles.", "toolId": 33 },
+      { "step": 4, "desc": "Intercepter le trafic HTTPS déchiffré.", "toolId": 2 }
+    ]
+  },
+  {
+    "id": "cloud-aws-audit",
+    "title": "Audit de Sécurité AWS",
+    "description": "Vérifier la posture de sécurité d'un compte AWS.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Configurer les clés API AWS CLI.", "toolId": 79 },
+      { "step": 2, "desc": "Lancer un audit CIS Benchmark.", "toolId": 79 },
+      { "step": 3, "desc": "Visualiser la surface d'attaque.", "toolId": 48 },
+      { "step": 4, "desc": "Vérifier les buckets S3 publics.", "toolId": 48 }
+    ]
+  },
+  {
+    "id": "cloud-git-leaks",
+    "title": "Chasse aux Secrets (Git)",
+    "description": "Trouver des clés API oubliées dans le code.",
+    "level": "Débutant",
+    "steps": [
+      { "step": 1, "desc": "Cloner le repository cible.", "toolId": 65 },
+      { "step": 2, "desc": "Scanner l'historique des commits.", "toolId": 65 },
+      { "step": 3, "desc": "Vérifier la validité des clés trouvées.", "toolId": 16 },
+      { "step": 4, "desc": "Scanner les repos publics de l'organisation.", "toolId": 34 }
+    ]
+  },
+  {
+    "id": "soc-eng-phishing",
+    "title": "Campagne de Phishing",
+    "description": "Simuler une attaque par email pour tester les employés.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Rechercher les emails des cibles.", "toolId": 46 },
+      { "step": 2, "desc": "Cloner la page de login (ex: Office 365).", "toolId": 91 },
+      { "step": 3, "desc": "Configurer le serveur d'envoi SMTP.", "toolId": 47 },
+      { "step": 4, "desc": "Lancer la campagne et suivre les clics.", "toolId": 47 }
+    ]
+  },
+  {
+    "id": "pivoting-manual",
+    "title": "Pivoting Réseau Manuel",
+    "description": "Accéder à un sous-réseau caché via une machine compromise.",
+    "level": "Avancé",
+    "steps": [
+      { "step": 1, "desc": "Compromettre la machine 'Bastion'.", "toolId": 3 },
+      { "step": 2, "desc": "Uploader le serveur Chisel sur le Bastion.", "toolId": 35 },
+      { "step": 3, "desc": "Créer un tunnel Reverse SOCKS.", "toolId": 35 },
+      { "step": 4, "desc": "Scanner le réseau caché via Proxychains.", "toolId": 86 }
+    ]
+  },
+  {
+    "id": "pivoting-modern",
+    "title": "Pivoting Moderne (VPN)",
+    "description": "Technique plus stable utilisant des interfaces TUN.",
+    "level": "Avancé",
+    "steps": [
+      { "step": 1, "desc": "Configurer l'interface TUN locale.", "toolId": 45 },
+      { "step": 2, "desc": "Déployer l'agent Ligolo sur la cible.", "toolId": 45 },
+      { "step": 3, "desc": "Établir la connexion VPN.", "toolId": 45 },
+      { "step": 4, "desc": "Accéder aux machines distantes directement par IP.", "toolId": 1 }
+    ]
+  },
+  {
+    "id": "forensics-disk",
+    "title": "Analyse Forensique Disque",
+    "description": "Analyser un disque dur saisi après un incident.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Créer une image disque bit-à-bit.", "toolId": 74 },
+      { "step": 2, "desc": "Charger l'image dans Autopsy.", "toolId": 18 },
+      { "step": 3, "desc": "Récupérer les fichiers supprimés.", "toolId": 78 },
+      { "step": 4, "desc": "Rechercher des artefacts (USB, Historique Web).", "toolId": 18 }
+    ]
+  },
+  {
+    "id": "forensics-memory",
+    "title": "Analyse Forensique Mémoire",
+    "description": "Analyser la RAM pour trouver des malwares sans fichiers.",
+    "level": "Avancé",
+    "steps": [
+      { "step": 1, "desc": "Identifier le profil de l'image mémoire.", "toolId": 66 },
+      { "step": 2, "desc": "Lister les processus actifs et cachés.", "toolId": 66 },
+      { "step": 3, "desc": "Lister les connexions réseau actives.", "toolId": 66 },
+      { "step": 4, "desc": "Dumper un processus suspect pour analyse.", "toolId": 66 }
+    ]
+  },
+  {
+    "id": "reverse-basic",
+    "title": "Reverse Engineering Basique",
+    "description": "Comprendre ce que fait un binaire inconnu (Linux/Windows).",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Identifier le type de fichier et les strings.", "toolId": 55 },
+      { "step": 2, "desc": "Ouvrir dans Ghidra pour décompiler.", "toolId": 14 },
+      { "step": 3, "desc": "Repérer la fonction 'main'.", "toolId": 14 },
+      { "step": 4, "desc": "Debugger pas à pas pour voir les registres.", "toolId": 77 }
+    ]
+  },
+  {
+    "id": "privesc-linux",
+    "title": "Escalade de Privilèges Linux",
+    "description": "Passer de www-data à Root.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Obtenir un shell stable.", "toolId": 49 },
+      { "step": 2, "desc": "Lancer LinPEAS pour l'audit auto.", "toolId": 36 },
+      { "step": 3, "desc": "Vérifier les binaires SUID.", "toolId": 36 },
+      { "step": 4, "desc": "Vérifier les tâches Cron et le Kernel.", "toolId": 36 }
+    ]
+  },
+  {
+    "id": "privesc-windows",
+    "title": "Escalade de Privilèges Windows",
+    "description": "Passer de User à Administrator/System.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Énumérer les infos système.", "toolId": 23 },
+      { "step": 2, "desc": "Vérifier les privilèges (SeImpersonate).", "toolId": 23 },
+      { "step": 3, "desc": "Lancer un script d'audit (WinPEAS - via shell).", "toolId": 23 },
+      { "step": 4, "desc": "Exploiter un service mal configuré.", "toolId": 3 }
+    ]
+  },
+  {
+    "id": "dos-stress-test",
+    "title": "Test de Charge / DoS",
+    "description": "Tester la résilience d'un serveur web.",
+    "level": "Débutant",
+    "steps": [
+      { "step": 1, "desc": "Vérifier l'état initial du serveur.", "toolId": 81 },
+      { "step": 2, "desc": "Lancer le stress test HTTP.", "toolId": 99 },
+      { "step": 3, "desc": "Monitorer le temps de réponse.", "toolId": 1 },
+      { "step": 4, "desc": "Arrêter le test et vérifier la reprise.", "toolId": 81 }
+    ]
+  },
+  {
+    "id": "k8s-audit",
+    "title": "Pentest Kubernetes",
+    "description": "Auditer un cluster K8s mal configuré.",
+    "level": "Avancé",
+    "steps": [
+      { "step": 1, "desc": "Accéder à un pod compromis.", "toolId": 16 },
+      { "step": 2, "desc": "Uploader Peirates.", "toolId": 64 },
+      { "step": 3, "desc": "Énumérer les ServiceAccounts.", "toolId": 64 },
+      { "step": 4, "desc": "Tenter d'accéder à l'API Server.", "toolId": 64 }
+    ]
+  },
+  {
+    "id": "data-exfiltration",
+    "title": "Exfiltration de Données",
+    "description": "Techniques pour sortir des fichiers discrètement.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Chiffrer ou encoder les données.", "toolId": 26 },
+      { "step": 2, "desc": "Cacher les données dans une image (Stégo).", "toolId": 89 },
+      { "step": 3, "desc": "Exfiltrer via DNS (lent mais discret).", "toolId": 84 },
+      { "step": 4, "desc": "Exfiltrer via tunnel ICMP ou HTTP.", "toolId": 35 }
+    ]
+  },
+  {
+    "id": "waf-bypass",
+    "title": "Contournement de WAF",
+    "description": "Techniques pour éviter la détection par le Pare-feu Web.",
+    "level": "Avancé",
+    "steps": [
+      { "step": 1, "desc": "Identifier le vendeur du WAF.", "toolId": 85 },
+      { "step": 2, "desc": "Chercher l'adresse IP d'origine (Bypass Cloudflare).", "toolId": 38 },
+      { "step": 3, "desc": "Utiliser des techniques de tamper SQLMap.", "toolId": 7 },
+      { "step": 4, "desc": "Utiliser des proxies rotatifs.", "toolId": 86 }
+    ]
+  },
+  {
+    "id": "iot-firmware",
+    "title": "Analyse Firmware IoT",
+    "description": "Auditer le logiciel d'une caméra ou d'un routeur.",
+    "level": "Avancé",
+    "steps": [
+      { "step": 1, "desc": "Télécharger le firmware.", "toolId": 55 },
+      { "step": 2, "desc": "Extraire le système de fichiers.", "toolId": 55 },
+      { "step": 3, "desc": "Chercher des clés SSH/API hardcodées.", "toolId": 34 },
+      { "step": 4, "desc": "Scanner les vulnérabilités connues (Routersploit).", "toolId": 63 }
+    ]
+  },
+  {
+    "id": "red-team-ops",
+    "title": "Opération Red Team (C2)",
+    "description": "Gestion d'une infrastructure d'attaque persistante.",
+    "level": "Expert",
+    "steps": [
+      { "step": 1, "desc": "Configurer le serveur C2 (Covenant/Empire).", "toolId": 95 },
+      { "step": 2, "desc": "Générer un payload indétectable.", "toolId": 95 },
+      { "step": 3, "desc": "Livrer le payload (Phishing/USB).", "toolId": 91 },
+      { "step": 4, "desc": "Maintenir la persistance et contrôler les agents.", "toolId": 67 }
+    ]
+  },
+  {
+    "id": "osint-user-tracking",
+    "title": "Tracking Utilisateur (OSINT)",
+    "description": "Retrouver une personne sur le web.",
+    "level": "Débutant",
+    "steps": [
+      { "step": 1, "desc": "Rechercher le pseudo sur tous les réseaux.", "toolId": 17 },
+      { "step": 2, "desc": "Vérifier les fuites de mots de passe (Breach).", "toolId": 46 },
+      { "step": 3, "desc": "Analyser les métadonnées des photos postées.", "toolId": 26 },
+      { "step": 4, "desc": "Visualiser les connexions dans Maltego.", "toolId": 70 }
+    ]
+  },
+  {
+    "id": "subdomain-takeover-verify",
+    "title": "Vérification Subdomain Takeover",
+    "description": "Confirmer qu'un sous-domaine est vulnérable.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Identifier les sous-domaines (Subfinder).", "toolId": 44 },
+      { "step": 2, "desc": "Scanner avec Nuclei (Template Takeover).", "toolId": 43 },
+      { "step": 3, "desc": "Vérifier l'enregistrement DNS CNAME.", "toolId": 84 },
+      { "step": 4, "desc": "Tenter de réclamer la ressource (Bucket/Github Page).", "toolId": 16 }
+    ]
+  },
+  {
+    "id": "api-hacking",
+    "title": "Pentest API REST",
+    "description": "Tester la sécurité d'une API web.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Intercepter le trafic mobile ou web.", "toolId": 2 },
+      { "step": 2, "desc": "Fuzzer les endpoints API.", "toolId": 24 },
+      { "step": 3, "desc": "Tester les failles IDOR (changer les IDs).", "toolId": 2 },
+      { "step": 4, "desc": "Tester les injections SQL dans le JSON.", "toolId": 7 }
+    ]
+  },
+  {
+    "id": "wifi-wps",
+    "title": "Attaque WiFi WPS (Pixie Dust)",
+    "description": "Exploiter la fonctionnalité WPS mal sécurisée.",
+    "level": "Débutant",
+    "steps": [
+      { "step": 1, "desc": "Identifier les réseaux avec WPS activé.", "toolId": 54 },
+      { "step": 2, "desc": "Lancer Reaver pour récupérer le PIN.", "toolId": 54 },
+      { "step": 3, "desc": "Si vulnérable, récupérer la clé WPA immédiatement.", "toolId": 54 },
+      { "step": 4, "desc": "Se connecter au réseau.", "toolId": 9 }
+    ]
+  },
+  {
+    "id": "blue-team-monitoring",
+    "title": "Blue Team: Monitoring Réseau",
+    "description": "Détecter les intrusions en temps réel.",
+    "level": "Intermédiaire",
+    "steps": [
+      { "step": 1, "desc": "Lancer Wireshark sur l'interface critique.", "toolId": 4 },
+      { "step": 2, "desc": "Filtrer pour les scans de ports (TCP SYN).", "toolId": 4 },
+      { "step": 3, "desc": "Détecter le trafic ARP suspect (Spoofing).", "toolId": 4 },
+      { "step": 4, "desc": "Capturer les preuves pour le rapport.", "toolId": 59 }
+    ]
+  },
+  {
+    "id": "powershell-obfuscation",
+    "title": "Obfuscation PowerShell",
+    "description": "Contourner les antivirus (AV/EDR).",
+    "level": "Avancé",
+    "steps": [
+      { "step": 1, "desc": "Générer un payload PowerShell.", "toolId": 67 },
+      { "step": 2, "desc": "Encoder le payload en Base64.", "toolId": 26 },
+      { "step": 3, "desc": "Utiliser Invoke-Obfuscation (non listé, manuel).", "toolId": 96 },
+      { "step": 4, "desc": "Exécuter en mémoire sans toucher le disque.", "toolId": 67 }
+    ]
+  },
+  {
+    "id": "container-escape",
+    "title": "Évasion de Conteneur (Docker)",
+    "description": "Sortir d'un docker pour accéder à l'hôte.",
+    "level": "Expert",
+    "steps": [
+      { "step": 1, "desc": "Vérifier si on est dans un Docker.", "toolId": 36 },
+      { "step": 2, "desc": "Vérifier les Capabilities (SYS_ADMIN).", "toolId": 36 },
+      { "step": 3, "desc": "Monter le disque de l'hôte.", "toolId": 16 },
+      { "step": 4, "desc": "Chrooter vers le système de fichiers hôte.", "toolId": 16 }
     ]
   }
 ]
