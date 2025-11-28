@@ -3,69 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ethical Hacking Toolkit - Ultimate Edition</title>
+    <title>Ethical Hacking Toolkit - V3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         cyber: {
-                            black: '#0d0d0d',
-                            dark: '#1a1a1a',
-                            green: '#00ff41',
-                            greenDim: '#008F11',
-                            purple: '#d600ff',
-                            text: '#e0e0e0'
+                            black: '#0d0d0d', dark: '#1a1a1a', green: '#00ff41',
+                            greenDim: '#008F11', purple: '#d600ff', text: '#e0e0e0'
                         }
                     },
-                    fontFamily: {
-                        mono: ['"Share Tech Mono"', 'monospace'],
-                    }
+                    fontFamily: { mono: ['"Share Tech Mono"', 'monospace'], }
                 }
             }
         }
     </script>
-
-    <style>
-        body {
-            background-color: #050505;
-            color: #e0e0e0;
-            font-family: 'Share Tech Mono', monospace;
-            background-image: radial-gradient(#112211 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-
-        /* Effet de lueur néon */
-        .neon-border { box-shadow: 0 0 5px #00ff41, inset 0 0 5px #00ff41; }
-        .neon-text { text-shadow: 0 0 5px #00ff41; }
-        .neon-purple-text { text-shadow: 0 0 5px #d600ff; }
-
-        /* Scrollbar customisée */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0d0d0d; }
-        ::-webkit-scrollbar-thumb { background: #008F11; }
-        ::-webkit-scrollbar-thumb:hover { background: #00ff41; }
-
-        /* Animation d'apparition */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .tool-card { animation: fadeIn 0.3s ease-out forwards; }
-
-        .modal-content { max-height: 70vh; overflow-y: auto; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="min-h-screen flex flex-col relative overflow-x-hidden">
 
     <header class="p-6 border-b border-cyber-greenDim bg-cyber-black bg-opacity-95 sticky top-0 z-40 backdrop-blur-sm">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <h1 class="text-3xl md:text-4xl font-bold text-cyber-green neon-text">
-                <i class="fas fa-terminal mr-2"></i>ETHICAL_TOOLKIT_V2
+                <i class="fas fa-terminal mr-2"></i>ETHICAL_TOOLKIT_V3
             </h1>
             <div class="text-xs md:text-sm border border-red-500 text-red-500 px-3 py-1 rounded bg-red-900 bg-opacity-20 text-center">
                 <i class="fas fa-exclamation-triangle mr-1"></i> AVERTISSEMENT : ÉDUCATION & PENTEST LÉGAL UNIQUEMENT
@@ -74,7 +38,6 @@
     </header>
 
     <main class="flex-grow container mx-auto px-4 py-8">
-        
         <div class="mb-10 space-y-6">
             <div class="relative max-w-2xl mx-auto group">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -84,57 +47,45 @@
                     class="block w-full pl-10 pr-3 py-3 border-2 border-cyber-greenDim bg-cyber-dark text-cyber-green placeholder-gray-600 focus:outline-none focus:border-cyber-green focus:ring-1 focus:ring-cyber-green transition-all rounded-sm" 
                     placeholder="Rechercher un outil (ex: scan, wifi, password...)" autocomplete="off">
             </div>
-
-            <div class="flex flex-wrap justify-center gap-2" id="categoryContainer">
-                </div>
-            
-            <div class="text-center text-xs text-gray-500">
-                <span id="toolCount">0</span> outils répertoriés
-            </div>
+            <div class="flex flex-wrap justify-center gap-2" id="categoryContainer"></div>
+            <div class="text-center text-xs text-gray-500"><span id="toolCount">...</span> outils répertoriés</div>
         </div>
 
         <div id="toolsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="col-span-full text-center text-gray-500 animate-pulse">
+                Chargement de la base de données...
             </div>
+        </div>
 
         <div id="noResults" class="hidden text-center py-20 text-gray-500">
             <i class="fas fa-bug text-4xl mb-4"></i>
-            <p class="text-xl">Aucun outil trouvé dans la base de données.</p>
+            <p class="text-xl">Aucun outil trouvé.</p>
         </div>
     </main>
 
     <footer class="border-t border-cyber-greenDim bg-cyber-black p-6 text-center text-sm text-gray-500 mt-10">
         <p>&copy; 2024 Ethical Hacking Toolkit. Code is Law.</p>
-        <p class="mt-1 text-xs">Utilisez ces outils de manière responsable. L'auteur décline toute responsabilité en cas d'usage illégal.</p>
     </footer>
 
     <div id="toolModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-90 backdrop-blur-sm p-4 transition-opacity duration-300">
         <div class="bg-cyber-dark border-2 border-cyber-green w-full max-w-2xl rounded-sm shadow-[0_0_30px_rgba(0,255,65,0.15)] relative flex flex-col max-h-[90vh]">
-            
             <div class="p-4 border-b border-cyber-greenDim flex justify-between items-center bg-cyber-black">
                 <h2 id="modalTitle" class="text-2xl font-bold text-cyber-green neon-text">NOM_OUTIL</h2>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 transition-colors focus:outline-none">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 transition-colors focus:outline-none"><i class="fas fa-times text-2xl"></i></button>
             </div>
-
             <div class="p-6 modal-content space-y-6">
                 <span id="modalCategory" class="inline-block px-3 py-1 text-xs font-bold text-cyber-black bg-cyber-purple rounded uppercase tracking-wider">CATEGORIE</span>
-                
                 <div>
                     <h3 class="text-cyber-purple text-lg mb-2 border-b border-gray-700 pb-1 font-bold">Description</h3>
                     <p id="modalDesc" class="text-gray-300 leading-relaxed text-sm">Description complète...</p>
                 </div>
-
                 <div>
                     <h3 class="text-cyber-green text-lg mb-2 border-b border-gray-700 pb-1 font-bold">Commande / Usage</h3>
                     <div class="relative group">
                         <pre class="bg-black border border-gray-700 p-4 rounded text-cyber-green text-sm overflow-x-auto font-mono"><code id="modalCommand">commande_exemple</code></pre>
-                        <button onclick="copyToClipboard()" class="absolute top-2 right-2 bg-cyber-dark border border-gray-600 hover:border-cyber-green text-gray-300 px-3 py-1 text-xs rounded transition-all flex items-center gap-2">
-                            <i class="fas fa-copy"></i> <span>Copier</span>
-                        </button>
+                        <button onclick="copyToClipboard()" class="absolute top-2 right-2 bg-cyber-dark border border-gray-600 hover:border-cyber-green text-gray-300 px-3 py-1 text-xs rounded transition-all flex items-center gap-2"><i class="fas fa-copy"></i> <span>Copier</span></button>
                     </div>
                 </div>
-
                 <div class="bg-gray-800 bg-opacity-50 p-4 rounded border-l-4 border-cyber-purple">
                     <h3 class="text-cyber-purple font-bold text-sm mb-1"><i class="fas fa-user-shield mr-2"></i>Cas d'usage éthique</h3>
                     <p id="modalEthical" class="text-xs text-gray-400 italic">Exemple d'utilisation légale...</p>
@@ -143,232 +94,6 @@
         </div>
     </div>
 
-    <script>
-        // --- DATA (50 Outils) ---
-        const toolsData = [
-            // RECONNAISSANCE
-            { id: 1, name: "Nmap", category: "Reconnaissance", shortDesc: "Le roi du scan réseau. Indispensable.", fullDesc: "Network Mapper est l'outil standard pour l'audit de sécurité réseau. Il découvre les hôtes, les ports ouverts, les versions de services et les OS.", command: "nmap -sC -sV -p- -T4 <IP>", ethicalUse: "Cartographie initiale d'un réseau autorisé pour identifier la surface d'attaque." },
-            { id: 2, name: "Masscan", category: "Reconnaissance", shortDesc: "Le scanner de ports le plus rapide d'Internet.", fullDesc: "Capable de scanner tout Internet en moins de 6 minutes. Il est moins précis que Nmap mais beaucoup plus rapide pour la découverte initiale.", command: "masscan -p80,443,8080 192.168.1.0/24 --rate=1000", ethicalUse: "Audit rapide de très larges plages d'IP pour détecter des services exposés." },
-            { id: 3, name: "Amass", category: "Reconnaissance", shortDesc: "Enumération DNS et mapping de surface d'attaque.", fullDesc: "Utilise l'OSINT et le brute-force pour découvrir des sous-domaines et visualiser l'infrastructure d'une cible.", command: "amass enum -d example.com", ethicalUse: "Découverte de sous-domaines oubliés (Shadow IT) lors d'un audit externe." },
-            { id: 4, name: "Naabu", category: "Reconnaissance", shortDesc: "Scanner de ports rapide écrit en Go.", fullDesc: "Un outil moderne axé sur la vitesse et la simplicité, souvent utilisé en pipeline avec d'autres outils ProjectDiscovery.", command: "naabu -host example.com", ethicalUse: "Vérification rapide de la disponibilité des ports dans un pipeline CI/CD de sécurité." },
-            { id: 5, name: "RustScan", category: "Reconnaissance", shortDesc: "Scanner de ports ultra-rapide boosté par Nmap.", fullDesc: "Scan les 65k ports en quelques secondes puis passe les résultats à Nmap pour l'analyse de version.", command: "rustscan -a <IP> -- -sC -sV", ethicalUse: "Accélérer la phase de reconnaissance lors des CTF ou pentests limités en temps." },
-            
-            // WEB HACKING
-            { id: 6, name: "Burp Suite", category: "Web", shortDesc: "L'outil ultime pour le test d'intrusion web.", fullDesc: "Proxy d'interception, scanner, intruder et repeater. Il permet de manipuler tout le trafic HTTP entre le navigateur et le serveur.", command: "burpsuite & (GUI)", ethicalUse: "Analyse manuelle approfondie des requêtes pour trouver des failles logiques." },
-            { id: 7, name: "OWASP ZAP", category: "Web", shortDesc: "Alternative Open Source à Burp Suite.", fullDesc: "Zed Attack Proxy est maintenu par l'OWASP. Excellent pour l'automatisation des scans de vulnérabilités web.", command: "zaproxy & (GUI)", ethicalUse: "Scans automatisés gratuits pour les développeurs et auditeurs." },
-            { id: 8, name: "Gobuster", category: "Web", shortDesc: "Brute-force d'URIs et de DNS ultra rapide.", fullDesc: "Écrit en Go, il est utilisé pour trouver des répertoires cachés, des fichiers et des sous-domaines via wordlists.", command: "gobuster dir -u http://target.com -w /usr/share/wordlists/dirb/common.txt", ethicalUse: "Découverte de pages d'administration ou de backups oubliés sur un serveur web." },
-            { id: 9, name: "Ffuf", category: "Web", shortDesc: "Fuzz Faster U Fool. Le fuzzer web moderne.", fullDesc: "Extrêmement rapide et flexible pour le fuzzing web (paramètres, headers, répertoires).", command: "ffuf -u http://target.com/FUZZ -w wordlist.txt", ethicalUse: "Recherche de paramètres cachés ou d'endpoints API non documentés." },
-            { id: 10, name: "SQLMap", category: "Web", shortDesc: "Injection SQL automatique.", fullDesc: "Détecte et exploite les failles d'injection SQL pour extraire des bases de données ou prendre le contrôle du serveur.", command: "sqlmap -u 'http://site.com/id=1' --dbs", ethicalUse: "Vérifier si les points d'entrée d'une application sont vulnérables aux injections SQL." },
-            { id: 11, name: "Nikto", category: "Web", shortDesc: "Scanner de vulnérabilités web classique.", fullDesc: "Recherche des fichiers dangereux, des versions de serveurs obsolètes et des problèmes de configuration.", command: "nikto -h http://target.com", ethicalUse: "Scan rapide pour identifier les mauvaises configurations serveur basiques." },
-            { id: 12, name: "WPScan", category: "Web", shortDesc: "Scanner de sécurité pour WordPress.", fullDesc: "Identifie les plugins vulnérables, les thèmes et les utilisateurs sur les sites WordPress.", command: "wpscan --url http://blog.com --enumerate p", ethicalUse: "Audit de sécurité spécifique pour les clients utilisant WordPress." },
-            { id: 13, name: "Nuclei", category: "Web", shortDesc: "Scanner de vulnérabilités basé sur des templates.", fullDesc: "Très puissant et communautaire. Il envoie des requêtes basées sur des modèles YAML pour détecter des CVE récentes.", command: "nuclei -u http://target.com", ethicalUse: "Détection rapide de CVE massivement exploitées (ex: Log4j) sur une infrastructure." },
-            { id: 14, name: "Commix", category: "Web", shortDesc: "Automatisation des injections de commandes OS.", fullDesc: "Similaire à SQLMap, mais spécialisé pour trouver et exploiter les failles 'Command Injection'.", command: "commix --url='http://site.com?param=val'", ethicalUse: "Preuve de concept pour démontrer l'exécution de code à distance (RCE)." },
-            
-            // PASSWORD
-            { id: 15, name: "John the Ripper", category: "Password", shortDesc: "Le couteau suisse du craquage de mots de passe.", fullDesc: "Capable de détecter et craquer des centaines de types de hachages (MD5, SHA, etc.) CPU-based.", command: "john --wordlist=rockyou.txt hash.txt", ethicalUse: "Audit de la robustesse des mots de passe stockés." },
-            { id: 16, name: "Hashcat", category: "Password", shortDesc: "Le craqueur de mots de passe le plus rapide (GPU).", fullDesc: "Utilise la carte graphique pour tester des millions de combinaisons par seconde. Supporte des règles complexes.", command: "hashcat -m 0 -a 0 hash.txt rockyou.txt", ethicalUse: "Test de résistance des hashs contre des attaques par force brute modernes." },
-            { id: 17, name: "Hydra", category: "Password", shortDesc: "Craqueur de login réseau rapide.", fullDesc: "Attaque par dictionnaire en ligne contre de nombreux protocoles (SSH, FTP, HTTP, SMB, etc.).", command: "hydra -l user -P passlist.txt ssh://192.168.1.1", ethicalUse: "Test des politiques de verrouillage de compte et des mots de passe faibles." },
-            { id: 18, name: "CeWL", category: "Password", shortDesc: "Générateur de wordlist personnalisé.", fullDesc: "Scrape un site web pour créer une liste de mots basée sur le contenu de la page (utile pour le contexte).", command: "cewl -w wordlist.txt -d 2 -m 5 http://site.com", ethicalUse: "Création de dictionnaires pertinents pour un audit spécifique." },
-            
-            // SNIFFING
-            { id: 19, name: "Wireshark", category: "Sniffing", shortDesc: "L'analyseur de protocole réseau standard.", fullDesc: "Permet de capturer et d'inspecter les paquets réseaux en détail. Indispensable pour le debug et l'analyse forensique.", command: "wireshark (GUI)", ethicalUse: "Analyse de trafic pour comprendre les protocoles ou détecter des anomalies." },
-            { id: 20, name: "Bettercap", category: "Sniffing", shortDesc: "Le couteau suisse du Man-In-The-Middle.", fullDesc: "Outil moderne et modulaire pour le MITM, le sniffing d'identifiants, et les attaques WiFi/BLE.", command: "bettercap -iface eth0", ethicalUse: "Démonstration des risques d'arp spoofing sur un réseau local." },
-            { id: 21, name: "Responder", category: "Sniffing", shortDesc: "Empoisonneur LLMNR/NBT-NS.", fullDesc: "Écoute les requêtes de noms sur le réseau et répond pour voler les hashs NTLMv2 des machines Windows.", command: "responder -I eth0 -dw", ethicalUse: "Audit interne pour démontrer les risques des protocoles de découverte Windows par défaut." },
-            
-            // POST-EXPLOITATION & AD
-            { id: 22, name: "Mimikatz", category: "Post-Exploitation", shortDesc: "L'outil légendaire pour l'extraction d'identifiants Windows.", fullDesc: "Peut extraire les mots de passe en clair, les hashs, et les tickets Kerberos de la mémoire (LSASS).", command: "privilege::debug token::elevate lsadump::sam", ethicalUse: "Vérification de la sécurité des endpoints et des risques de vol d'identifiants." },
-            { id: 23, name: "BloodHound", category: "Post-Exploitation", shortDesc: "Cartographie des relations Active Directory.", fullDesc: "Utilise la théorie des graphes pour révéler les chemins d'attaque cachés vers l'Admin de Domaine.", command: "sharpHound.exe (collector)", ethicalUse: "Audit d'architecture AD pour identifier et fermer les chemins d'élévation de privilèges." },
-            { id: 24, name: "Evil-WinRM", category: "Post-Exploitation", shortDesc: "Shell interactif Windows via WinRM.", fullDesc: "L'outil ultime pour interagir avec des machines Windows une fois des identifiants obtenus.", command: "evil-winrm -i <IP> -u user -p pass", ethicalUse: "Administration à distance légitime et validation d'accès." },
-            { id: 25, name: "CrackMapExec", category: "Post-Exploitation", shortDesc: "Le 'couteau suisse' pour Pentest Active Directory.", fullDesc: "Permet de scanner, attaquer et administrer massivement des réseaux AD (SMB, WinRM, MSSQL).", command: "crackmapexec smb 192.168.1.0/24 -u user -p pass --users", ethicalUse: "Audit rapide de la surface d'attaque interne et propagation latérale." },
-            { id: 26, name: "LinPEAS", category: "Post-Exploitation", shortDesc: "Script d'énumération de privilèges Linux.", fullDesc: "Recherche automatiquement les mauvaises configurations permettant de devenir Root.", command: "./linpeas.sh", ethicalUse: "Gain de temps lors de la recherche de vecteurs d'escalade de privilèges." },
-            { id: 27, name: "Ligolo-ng", category: "Tunneling", shortDesc: "Outil de tunneling/pivoting nouvelle génération.", fullDesc: "Plus performant que Chisel, il utilise des interfaces TUN pour un pivoting réseau complet et simple.", command: "./proxy -selfcert (serveur) / ./agent (cible)", ethicalUse: "Accéder à des réseaux segmentés lors d'un audit interne." },
-            
-            // EXPLOITATION
-            { id: 28, name: "Metasploit", category: "Exploitation", shortDesc: "Le framework d'exploitation le plus populaire.", fullDesc: "Contient des milliers d'exploits, de payloads et d'outils auxiliaires pour tester les vulnérabilités.", command: "msfconsole", ethicalUse: "Validation de vulnérabilités et tests de pénétration complets." },
-            { id: 29, name: "Searchsploit", category: "Exploitation", shortDesc: "Copie locale d'Exploit-DB.", fullDesc: "Permet de rechercher des exploits connus directement depuis le terminal, hors ligne.", command: "searchsploit apache 2.4", ethicalUse: "Recherche rapide de PoC pour des services obsolètes détectés." },
-            
-            // REVERSE
-            { id: 30, name: "Ghidra", category: "Reverse", shortDesc: "Suite de reverse engineering de la NSA.", fullDesc: "Désassembleur et décompilateur puissant, gratuit et open source. Concurrence IDA Pro.", command: "./ghidraRun", ethicalUse: "Analyse de malware ou audit de code binaire fermé." },
-            { id: 31, name: "Radare2", category: "Reverse", shortDesc: "Framework de reverse engineering en CLI.", fullDesc: "Très léger, puissant et scriptable. Idéal pour les analyses rapides ou sur des systèmes sans GUI.", command: "r2 -d binary", ethicalUse: "Analyse de binaires et CTF Pwn/Reverse." },
-            { id: 32, name: "ImHex", category: "Reverse", shortDesc: "Éditeur Hexadécimal moderne.", fullDesc: "Interface magnifique, pattern matching, et décodage de données intégré.", command: "imhex (GUI)", ethicalUse: "Analyse bas niveau de fichiers et structures de données." },
-            
-            // OSINT
-            { id: 33, name: "Sherlock", category: "OSINT", shortDesc: "Chasseur de noms d'utilisateur.", fullDesc: "Recherche un pseudo spécifique sur des centaines de réseaux sociaux pour trouver des comptes liés.", command: "python3 sherlock.py username", ethicalUse: "Investigation numérique et vérification de l'empreinte numérique." },
-            { id: 34, name: "Shodan CLI", category: "OSINT", shortDesc: "Moteur de recherche pour les objets connectés.", fullDesc: "Permet de rechercher des serveurs, caméras, et équipements industriels exposés sur Internet.", command: "shodan host 8.8.8.8", ethicalUse: "Surveillance de la surface d'attaque externe d'une organisation." },
-            { id: 35, name: "TheHarvester", category: "OSINT", shortDesc: "Collecte d'emails et de domaines.", fullDesc: "Scrape Google, LinkedIn, Bing, etc. pour trouver des emails et des sous-domaines d'une organisation.", command: "theHarvester -d company.com -b google", ethicalUse: "Simulation de phase de reconnaissance pour une campagne de phishing éthique." },
-            { id: 36, name: "Gophish", category: "Social Eng.", shortDesc: "Plateforme de phishing open source.", fullDesc: "Permet de créer et gérer des campagnes de phishing simulées pour tester la sensibilisation des employés.", command: "./gophish", ethicalUse: "Campagnes de sensibilisation et tests d'ingénierie sociale approuvés." },
-            
-            // MOBILE & CLOUD
-            { id: 37, name: "MobSF", category: "Mobile", shortDesc: "Mobile Security Framework.", fullDesc: "Outil tout-en-un pour l'analyse statique et dynamique d'applications Android et iOS (APK/IPA).", command: "./run.sh 127.0.0.1:8000", ethicalUse: "Audit de sécurité d'applications mobiles avant publication." },
-            { id: 38, name: "Frida", category: "Mobile", shortDesc: "Toolkit d'instrumentation dynamique.", fullDesc: "Permet d'injecter du JavaScript dans des applications natives (Windows, macOS, Android, iOS) pour modifier leur comportement en temps réel.", command: "frida -U -f com.example.app", ethicalUse: "Bypass de SSL Pinning ou détection de Root lors d'audits mobiles." },
-            { id: 39, name: "ScoutSuite", category: "Cloud", shortDesc: "Outil d'audit de sécurité multi-cloud.", fullDesc: "Scanne les environnements AWS, Azure, GCP pour détecter les mauvaises configurations de sécurité.", command: "scout aws", ethicalUse: "Audit de conformité et sécurité des environnements cloud." },
-            { id: 40, name: "Gitleaks", category: "Cloud/DevOps", shortDesc: "Détecteur de secrets dans git.", fullDesc: "Scanne l'historique des repos git pour trouver des clés API, des mots de passe ou des tokens commités par erreur.", command: "gitleaks detect --source=.", ethicalUse: "Nettoyage de repository et prévention de fuite de données." },
-            
-            // WIRELESS
-            { id: 41, name: "Aircrack-ng", category: "Wireless", shortDesc: "Suite complète pour l'audit WiFi.", fullDesc: "Monitoring, attaque (replay), craquage de clés WEP et WPA-PSK.", command: "airmon-ng start wlan0", ethicalUse: "Test de la robustesse des clés WiFi d'entreprise." },
-            { id: 42, name: "Kismet", category: "Wireless", shortDesc: "Détecteur de réseau sans fil passif.", fullDesc: "Sniffer WiFi, Bluetooth et RF qui détecte les réseaux sans envoyer de paquets (indétectable).", command: "kismet", ethicalUse: "Détection de Rogue AP (Points d'accès pirates) dans une entreprise." },
-            { id: 43, name: "Wifite2", category: "Wireless", shortDesc: "Automatisation des attaques WiFi.", fullDesc: "Wrapper Python qui automatise les outils comme aircrack, reaver, etc. pour auditer plusieurs réseaux à la suite.", command: "wifite", ethicalUse: "Audit rapide de la sécurité WiFi environnante." },
-            
-            // UTILS
-            { id: 44, name: "CyberChef", category: "Utils", shortDesc: "Le 'couteau suisse' pour les données.", fullDesc: "Application web pour encoder, décoder, chiffrer, déchiffrer et analyser des formats de données complexes.", command: "Utilisation via navigateur", ethicalUse: "Décodage rapide de payloads base64 ou de shellcodes obfusqués." },
-            { id: 45, name: "Pwncat-cs", category: "Post-Exploitation", shortDesc: "Netcat sous stéroïdes avec gestion de shell.", fullDesc: "Transforme un reverse shell basique en un shell stable, avec upload/download de fichiers et énumération automatique.", command: "pwncat-cs -lp 4444", ethicalUse: "Stabilisation de connexions lors de CTF ou pentests." },
-            { id: 46, name: "Chisel", category: "Tunneling", shortDesc: "Tunnel TCP/UDP via HTTP.", fullDesc: "Permet de passer outre les pare-feux restrictifs en encapsulant le trafic dans du HTTP.", command: "chisel server -p 8000 --reverse", ethicalUse: "Accès à des zones restreintes du réseau via un serveur web compromis." },
-            { id: 47, name: "Netcat (nc)", category: "Utils", shortDesc: "Le couteau suisse TCP/IP original.", fullDesc: "Outil simple pour lire et écrire des données à travers le réseau. Utilisé pour tout : chat, transfert de fichier, reverse shell.", command: "nc -lvnp 4444", ethicalUse: "Debugging réseau et établissement de connexions simples." },
-            { id: 48, name: "Socat", category: "Utils", shortDesc: "Netcat bidirectionnel avancé.", fullDesc: "Comme Netcat mais supporte les fichiers, pipes, périphériques, SSL, etc. Très puissant pour le port forwarding.", command: "socat TCP-LISTEN:80,fork TCP:target:80", ethicalUse: "Redirection de trafic complexe et contournement de restrictions." },
-            { id: 49, name: "TruffleHog", category: "Cloud/DevOps", shortDesc: "Chasseur de secrets haute entropie.", fullDesc: "Scanne Git, systèmes de fichiers et buckets S3 pour trouver des clés secrètes.", command: "trufflehog git https://github.com/user/repo", ethicalUse: "Audit de code source pour prévenir les fuites de secrets." },
-            { id: 50, name: "Peirates", category: "Cloud", shortDesc: "Outil d'exploitation Kubernetes.", fullDesc: "Outil conçu pour pentester et élever ses privilèges dans un cluster Kubernetes.", command: "./peirates", ethicalUse: "Audit de sécurité des infrastructures conteneurisées (K8s)." }
-        ];
-
-        // --- STATE & DOM ELEMENTS ---
-        const container = document.getElementById('toolsContainer');
-        const searchInput = document.getElementById('searchInput');
-        const categoryContainer = document.getElementById('categoryContainer');
-        const noResults = document.getElementById('noResults');
-        const toolCount = document.getElementById('toolCount');
-        
-        // Modal Elements
-        const modal = document.getElementById('toolModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalCategory = document.getElementById('modalCategory');
-        const modalDesc = document.getElementById('modalDesc');
-        const modalCommand = document.getElementById('modalCommand');
-        const modalEthical = document.getElementById('modalEthical');
-
-        let currentFilter = 'Tous';
-        let currentSearch = '';
-
-        // --- INITIALIZATION ---
-        function init() {
-            renderCategories();
-            renderTools();
-            updateCount();
-            
-            // Event Listeners
-            searchInput.addEventListener('input', (e) => {
-                currentSearch = e.target.value.toLowerCase();
-                renderTools();
-            });
-
-            // Close modal on outside click
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
-            });
-            
-            // Close modal on Escape key
-            document.addEventListener('keydown', (e) => {
-                if(e.key === "Escape" && !modal.classList.contains('hidden')) {
-                    closeModal();
-                }
-            });
-        }
-
-        // --- RENDER FUNCTIONS ---
-        function renderCategories() {
-            const categories = ['Tous', ...new Set(toolsData.map(tool => tool.category))];
-            
-            categoryContainer.innerHTML = categories.map(cat => `
-                <button 
-                    onclick="setCategory('${cat}')"
-                    class="px-3 py-1 text-xs md:text-sm border border-cyber-greenDim hover:bg-cyber-green hover:text-black transition-all duration-300 rounded-sm uppercase tracking-wide ${currentFilter === cat ? 'bg-cyber-green text-black font-bold shadow-[0_0_10px_#00ff41]' : 'text-cyber-green bg-cyber-dark'}"
-                >
-                    ${cat}
-                </button>
-            `).join('');
-        }
-
-        function renderTools() {
-            container.innerHTML = '';
-            
-            const filteredTools = toolsData.filter(tool => {
-                const matchesCategory = currentFilter === 'Tous' || tool.category === currentFilter;
-                const matchesSearch = tool.name.toLowerCase().includes(currentSearch) || 
-                                      tool.shortDesc.toLowerCase().includes(currentSearch) ||
-                                      tool.category.toLowerCase().includes(currentSearch);
-                return matchesCategory && matchesSearch;
-            });
-
-            if (filteredTools.length === 0) {
-                noResults.classList.remove('hidden');
-                toolCount.textContent = 0;
-            } else {
-                noResults.classList.add('hidden');
-                toolCount.textContent = filteredTools.length;
-                
-                filteredTools.forEach(tool => {
-                    const card = document.createElement('div');
-                    card.className = 'bg-cyber-dark border border-cyber-greenDim p-5 rounded-sm hover:border-cyber-green hover:shadow-[0_0_15px_rgba(0,255,65,0.15)] transition-all cursor-pointer group tool-card flex flex-col justify-between h-full relative overflow-hidden';
-                    card.onclick = () => openModal(tool);
-                    
-                    // Decorative element
-                    const decoration = document.createElement('div');
-                    decoration.className = 'absolute top-0 right-0 w-4 h-4 border-t border-r border-cyber-green opacity-50 group-hover:opacity-100 transition-opacity';
-                    card.appendChild(decoration);
-
-                    card.innerHTML += `
-                        <div>
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="text-xl font-bold text-cyber-green group-hover:neon-text transition-all tracking-wide">${tool.name}</h3>
-                                <span class="text-[10px] text-cyber-purple border border-cyber-purple px-2 py-0.5 rounded uppercase">${tool.category}</span>
-                            </div>
-                            <p class="text-gray-400 text-sm mb-4 line-clamp-3 font-sans">${tool.shortDesc}</p>
-                        </div>
-                        <div class="flex justify-between items-end border-t border-gray-800 pt-3 mt-2">
-                            <span class="text-xs text-gray-600 font-mono">ID: ${String(tool.id).padStart(3, '0')}</span>
-                            <span class="text-xs text-cyber-greenDim group-hover:text-cyber-green font-mono transition-colors">./ACCESS >></span>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            }
-        }
-
-        function updateCount() {
-            toolCount.textContent = toolsData.length;
-        }
-
-        // --- ACTIONS ---
-        function setCategory(cat) {
-            currentFilter = cat;
-            renderCategories();
-            renderTools();
-        }
-
-        function openModal(tool) {
-            modalTitle.textContent = tool.name;
-            modalCategory.textContent = tool.category;
-            modalDesc.textContent = tool.fullDesc;
-            modalCommand.textContent = tool.command;
-            modalEthical.textContent = tool.ethicalUse;
-            
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; 
-        }
-
-        function closeModal() {
-            modal.classList.add('hidden');
-            document.body.style.overflow = 'auto'; 
-        }
-
-        function copyToClipboard() {
-            const text = modalCommand.textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = document.querySelector('#toolModal button i.fa-copy').parentNode;
-                const originalHtml = btn.innerHTML;
-                
-                btn.innerHTML = '<i class="fas fa-check"></i> <span>Copié !</span>';
-                btn.classList.add('text-cyber-green', 'border-cyber-green');
-                
-                setTimeout(() => {
-                    btn.innerHTML = originalHtml;
-                    btn.classList.remove('text-cyber-green', 'border-cyber-green');
-                }, 2000);
-            }).catch(err => {
-                console.error('Erreur :', err);
-            });
-        }
-
-        // Start App
-        init();
-    </script>
+    <script src="app.js" defer></script>
 </body>
 </html>
